@@ -10,10 +10,8 @@ import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 
 const MyChats = ({ fetchAgain }) => {
-  const [loggedUser, setLoggedUser] = useState();
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-  console.log(user)
+  const { selectedChat, setSelectedChat, user, chats, setChats,setUser } = ChatState();
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -40,7 +38,7 @@ const MyChats = ({ fetchAgain }) => {
   };
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+    setUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
   }, [fetchAgain]);
@@ -102,7 +100,7 @@ const MyChats = ({ fetchAgain }) => {
               >
                 <Text>
                   {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
+                    ? getSender(user, chat.users)
                     : chat.chatName}
                 </Text>
                 {chat.latestMessage && (
