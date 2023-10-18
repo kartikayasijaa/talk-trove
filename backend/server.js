@@ -18,7 +18,20 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 
-const __dirname1 = path.resolve();
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+  });
+} else {
+
+  app.get('/', (req, res) => {
+    res.send('Server running');
+  });
+}
 
 app.get("/", (req, res) => {
   res.send("API is running..");
