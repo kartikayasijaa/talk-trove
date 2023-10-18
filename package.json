@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
-    "build": "cd frontend && yarn build"
+    "build": "yarn && cd frontend && yarn && yarn build"
   },
   "keywords": [
     "mern",
