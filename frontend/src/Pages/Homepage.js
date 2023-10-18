@@ -25,7 +25,7 @@ function Homepage() {
   return (
     <Container maxW="xl" centerContent>
       <Box
-        d="flex"
+        display="flex"
         justifyContent="center"
         p={3}
         bg="white"
@@ -35,7 +35,7 @@ function Homepage() {
         borderWidth="1px"
       >
         <Text fontSize="4xl" fontFamily="Work sans">
-          Talk-A-Tive
+          Chat
         </Text>
       </Box>
       <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
