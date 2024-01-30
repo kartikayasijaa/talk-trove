@@ -6,6 +6,7 @@ import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosReq } from "../../config/axios";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -50,7 +51,7 @@ const Signup = () => {
           "Content-type": "application/json",
         },
       };
-      const { data } = await axios.post(
+      const { data } = await axiosReq.post(
         "/api/user",
         {
           name,

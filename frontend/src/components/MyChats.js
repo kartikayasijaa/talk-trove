@@ -8,6 +8,7 @@ import ChatLoading from "./ChatLoading";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
+import { axiosReq } from "../config/axios";
 
 const MyChats = ({ fetchAgain }) => {
 
@@ -23,7 +24,7 @@ const MyChats = ({ fetchAgain }) => {
         },
       };
 
-      const { data } = await axios.get("/api/chat", config);
+      const { data } = await axiosReq.get("/api/chat", config);
       setChats(data);
     } catch (error) {
       toast({

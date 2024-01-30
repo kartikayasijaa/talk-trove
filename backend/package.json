@@ -8,10 +8,6 @@
     "server": "nodemon backend/server.js",
     "build": "yarn && cd frontend && yarn && yarn build"
   },
-  "keywords": [
-    "mern",
-    "chat-app"
-  ],
   "author": "Kartikay Asija",
   "license": "ISC",
   "dependencies": {
@@ -24,8 +20,5 @@
     "mongoose": "^5.12.9",
     "nodemon": "^2.0.7",
     "socket.io": "^4.1.2"
-  },
-  "engines": {
-    "node" : ">=16.0.0 <=19.0.0"
   }
 }
