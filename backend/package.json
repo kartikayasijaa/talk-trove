@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "server": "nodemon backend/server.js",
-    "build": "yarn && cd frontend && yarn && yarn build"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "Kartikay Asija",
   "license": "ISC",
