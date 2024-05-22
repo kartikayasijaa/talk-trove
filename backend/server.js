@@ -20,21 +20,6 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-if (isProduction) {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-  });
-} else {
-
-  app.get('/', (req, res) => {
-    res.send('Server running');
-  });
-}
-
 app.get("/", (req, res) => {
   res.send("API is running..");
 });
@@ -72,7 +57,7 @@ io.on("connection", (socket) => {
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
   socket.on("new message", (newMessageRecieved) => {
-    var chat = newMessageRecieved.chat;
+    let chat = newMessageRecieved.chat;
 
     if (!chat.users) return console.log("chat.users not defined");
 
