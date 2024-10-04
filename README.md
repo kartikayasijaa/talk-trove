@@ -29,6 +29,11 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 
 ## Project initialization locally:-
 
+### Make sure yarn is installed in your system if not use this command:-
+```bash
+    npm install -g yarn
+```
+Then follow these steps:-
 1. Clone the project
 
 ```bash
