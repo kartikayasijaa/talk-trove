@@ -1,7 +1,7 @@
 # Chat-App
 
 It is a Full Stack Chatting App.
-Uses Socket.io for real time communication and stores user details in encrypted format in Mongo DB Database.
+Uses Socket.io for real-time communication and stores user details in encrypted format in Mongo DB Database.
 
 ## Demo:-
 
@@ -21,11 +21,11 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 
 ## What I learned through this Project?
 
-- Web Sockets and Socket.IO: Throughout this project, I learned about Web Sockets and their implementation using Socket.io. Including broadcasting messages to multiple clients, handling different events, implementing acknowledgments and handling disconnect and error events.
-- Context API: As part of this project, I also learned about the Context API. I gained an understanding of how to use it in React to manage global state and share data between components without the need for prop drilling
-- UI with Chakra UI: I learned to built a user friendly UI design using Chakra UI.
+- Web Sockets and Socket.IO: Throughout this project, I learned about Web Sockets and their implementation using Socket.io. Including broadcasting messages to multiple clients, handling different events, implementing acknowledgments, and handling disconnect and error events.
+- Context API: I also learned about the Context API as part of this project. I gained an understanding of how to use it in React to manage global state and share data between components without the need for prop drilling
+- UI with Chakra UI: I learned to build a user-friendly UI design using Chakra UI.
 
-## Read Contributing.md to follow open source guidelines 
+## Read Contributing.md to follow open-source guidelines 
 
 ## Project initialization locally:-
 
@@ -42,7 +42,9 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 ```
 
 ### Start the server:
-
+```bash
+  cd backend
+```
 
 1. Make a .env file and add this
 
@@ -64,16 +66,29 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 ```bash
   yarn run dev
 ```
+4. Open new tab in browser and navigate to:
+```bash
+  https//localhost:4444
+```
 
 ### Start the Client :
+```bash
+  cd frontend
+```
 
 1. Make .env and add this:
 ```bash
   REACT_APP_API_URL='http://localhost:3000'
 ```
+2. run yarn command
 
 ```bash
-  cd frontend
+  yarn
+```
+3. run yarn command
+
+```bash
+  yarn start
 ```
 
-### Made with love 💖 by ![kartik](https://github.com/kartikayasijaa)
+### Made with love 💖
