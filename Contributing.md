@@ -4,7 +4,7 @@
 
 Explore open issues to work on [here](https://github.com/kartikayasijaa/talk-trove/issues).
 
-If you found a bug or have a suggestion, [create a new issue](https://github.com/kartikayasijaa/talk-trove/issues/new).
+If you found a bug or have a suggestion, [create a new issue](https://github.com/kartikayasijaa/talk-trove/issues/new/choose).
 
 # **🔼Follow Instructions**
 
