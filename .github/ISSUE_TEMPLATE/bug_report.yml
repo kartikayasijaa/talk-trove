@@ -1,6 +1,7 @@
 name: Bug report 🐞
 description: File a bug report
-title: "[Bug]: "
+title: "[Bug]:🐞"
+labels: bug
 body:
   - type: checkboxes
     id: existing-issue
@@ -13,9 +14,9 @@ body:
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
+      label: What happened and Write Steps to Produce(ie. How u got the bug)?
       description: A concise description of what you are experiencing.
-      placeholder: Tell us what you see!
+      placeholder: Tell us what you see and Write Steps to Produce: !
     validations:
       required: true
   - type: textarea
