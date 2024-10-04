@@ -25,7 +25,7 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 - Context API: I also learned about the Context API as part of this project. I gained an understanding of how to use it in React to manage global state and share data between components without the need for prop drilling
 - UI with Chakra UI: I learned to build a user-friendly UI design using Chakra UI.
 
-## Read Contributing.md to follow open-source guidelines 
+## First Read [Contributing.md](https://github.com/kartikayasijaa/talk-trove/blob/main/Contributing.md) to follow open-source guidelines 
 
 ## Project initialization locally:-
 
