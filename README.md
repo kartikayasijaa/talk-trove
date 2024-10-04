@@ -43,6 +43,7 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 
 ### Start the server:
 
+
 1. Make a .env file and add this
 
 ```bash
