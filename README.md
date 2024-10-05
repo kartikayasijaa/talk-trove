@@ -96,4 +96,16 @@ Then follow these steps:-
   yarn start
 ```
 
+## 👀 Our Contributors
+
+- We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
+- Make sure you show some love by giving ⭐ to our repository.
+
+<div align="center">
+
+  <a href="https://github.com/kartikayasijaa/talk-trove/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=kartikayasijaa/talk-trove&&max=1000" />
+  </a>
+</div>
+
 ### Made with love 💖
