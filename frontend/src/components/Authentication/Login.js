@@ -4,10 +4,11 @@ import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
 import { axiosReq } from "../../config/axios";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [show, setShow] = useState(false);
@@ -120,6 +121,9 @@ const Login = () => {
       >
         Get Guest User Credentials
       </Button>
+      <Text fontSize="sm" mt={3}>
+        <Link to="/forgot-password" style={{ color: "blue" }}>Forgot your password?</Link>
+      </Text>
     </VStack>
   );
 };
