@@ -78,14 +78,10 @@ const createDummyMessages = async (chats, users, numMessages = 20) => {
 
 // Seed the database
 const seedDatabase = async () => {
-  await connectDB();
 
   try {
-    // Clean up the existing data
-    await User.deleteMany();
-    await Chat.deleteMany();
-    await Message.deleteMany();
 
+    await connnectDB();
     // Create dummy users
     const users = await createDummyUsers();
 
