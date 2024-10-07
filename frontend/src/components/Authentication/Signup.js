@@ -4,9 +4,9 @@ import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosReq } from "../../config/axios";
+import React, {useState} from "react";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -20,6 +20,44 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
+
+  const checkPasswordStrength = (password)=>{
+    const hasUpperCase = /[A-Z]/.test(password)
+    const hasLowerCase = /[a-z]/.test(password)
+    const hasNumbers = /[0-9]/.test(password)
+    const hasSymbols = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)
+
+    if(password.length<6){
+      return "weak";
+    }
+    else if(password.length<8){
+      return "medium";
+    }
+    else if(hasUpperCase && hasLowerCase && hasNumbers && hasSymbols){
+      return "strong";
+    }
+    else{
+      return "medium";
+    }
+  }
+  const handlePasswordChange = (e)=>{
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordStrength(checkPasswordStrength(newPassword));
+  }
+  const getPasswordStrengthColor=()=>{
+    switch(passwordStrength){
+      case "weak":
+        return 'red.500';
+      case "medium":  
+        return 'yellow.500';
+      case "strong":
+        return 'green.500';
+      default:
+        return 'gray.500';
+    }
+  }
 
   const submitHandler = async () => {
     setPicLoading(true);
@@ -153,7 +191,8 @@ const Signup = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter Password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
+            borderColor={getPasswordStrengthColor}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
