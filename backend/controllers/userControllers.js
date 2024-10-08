@@ -1,48 +1,6 @@
-import { sendVerificationEmail } from '../mailtrap/emails.js';
-import { sendWelcomeEmail } from '../mailtrap/emails.js';
-import { sendResetPasswordResetEmail } from '../mailtrap/emails.js';
-
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
-const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
-
-
-// changes made Here 
-generateTokenAndSetCookie(res,user._id);
-        await sendVerificationEmail(user.email,verificationToken);
-        res.redirect('/verify-email');
-
-        export const verifyEmail = async (req, res) => {
-          const {code} = req.body;
-          try{
-              const user = await User.findOne({
-                  verificationToken:code,
-                  verifiedTokenExpiresAt:{$gt:Date.now()}
-              });
-              if(!user){
-                  return res.status(400).json({success:false,message:"Invalid or expired verification code"});
-              }
-              user.isVerified = true;
-              user.verificationToken = undefined;
-              user.verifiedTokenExpiresAt = undefined;
-              await user.save();
-      
-              await sendWelcomeEmail(user.email,user.name);
-              res.status(200).json({success:true,
-                  message:"Email verified successfully",
-                  user: {
-                      ...user._doc,
-                      password:undefined
-                  }
-              });
-          }catch(error){
-              console.log("error in verify email",error);
-              res.status(400).json({success:false,message:error.message});
-          }
-      }
-      
-
 
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -114,29 +72,5 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
-
-export const forgotPassword = async (req, res) => {
-  const {email} = req.body;
-  try{
-      const user = await User.findOne({email});
-      if(!user){
-          return res.status(400).json({success:false,message:"User not found"});
-      }
-      //Generate a random reset token
-      const resetToken = crypto.randomBytes(20).toString('hex');
-      const resetTokenExpiresAt = Date.now() + 60*60*1000; //1 hou r
-      user.resetPasswordToken = resetToken;
-      user.resetPasswordExpiresAt = resetTokenExpiresAt;
-      await user.save();
-      //send email
-
-      await sendResetPasswordResetEmail(user.email,`${process.env.CLIENT_URL}/reset-password/${resetToken}`);
-      res.status(200).json({success:true,message:"Password reset email link sent successfully"});
-  }catch(err){
-      console.log("error in forgot password",err);
-      res.status(400).json({success:false,message:err.message});
-
-  }
-  }
 
 module.exports = { allUsers, registerUser, authUser };
