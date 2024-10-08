@@ -25,28 +25,26 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 - Context API: I also learned about the Context API as part of this project. I gained an understanding of how to use it in React to manage global state and share data between components without the need for prop drilling
 - UI with Chakra UI: I learned to build a user-friendly UI design using Chakra UI.
 
-## First Read [Contributing.md](https://github.com/kartikayasijaa/talk-trove/blob/main/Contributing.md) to follow open-source guidelines 
+## First Read [Contributing.md](https://github.com/kartikayasijaa/talk-trove/blob/main/Contributing.md) to follow open-source guidelines
 
 ## Project initialization locally:-
 
 ### Make sure yarn is installed in your system if not use this command:-
+
 ```bash
     npm install -g yarn
 ```
+
 Then follow these steps:-
+
 1. Clone the project
 
 ```bash
   git clone https://github.com/kartikayasija/chat-app
 ```
 
-2. run yarn command
-
-```bash
-  yarn
-```
-
 ### Start the server:
+
 ```bash
   cd backend
 ```
@@ -60,7 +58,13 @@ Then follow these steps:-
   NODE_ENV="" #findit
 ```
 
-2. run yarn command
+2. seed dummy data in database
+
+```bash
+yarn run seed
+```
+
+3. run yarn command
 
 ```bash
   yarn
@@ -71,25 +75,31 @@ Then follow these steps:-
 ```bash
   yarn run dev
 ```
+
 4. Open new tab in browser and navigate to:
+
 ```bash
   https//localhost:4444
 ```
 
 ### Start the Client :
+
 ```bash
   cd frontend
 ```
 
 1. Make .env and add this:
+
 ```bash
   REACT_APP_API_URL='http://localhost:3000'
 ```
+
 2. run yarn command
 
 ```bash
   yarn
 ```
+
 3. run yarn command
 
 ```bash
