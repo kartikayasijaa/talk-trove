@@ -1,3 +1,9 @@
+
+<!-- List any issues related to this PR. Link them using "Fixes #issue-number" to automatically close them when the PR is merged. -->
+
+- Fixes #
+
+
 ## 📋 Description
 
 <!-- Please provide a brief description of your changes and explain the purpose of the PR. -->
@@ -10,17 +16,17 @@
 - 
 - 
 
+## 🔨 Screen Shots OR Short videos of working
+
+<!-- Attach ss or short videos of the chnages which u made. -->
+
+
 ## ✅ Checklist
 
 Before submitting the PR, please make sure you have completed the following:
 
 - [ ] My code follows the style guidelines of this project.
-- [ ] I have performed a self-review of my own code.
-- [ ] I have commented my code, particularly in hard-to-understand areas.
-- [ ] I have made corresponding changes to the documentation (if applicable).
-- [ ] My changes generate no new warnings.
-- [ ] I have tested it locally and it works fine.
-- [ ] Any dependent changes have been merged and published in downstream modules.
+- [ ] Read Contributing.md
 
 ## 🏷️ Types of Changes
 
@@ -33,17 +39,8 @@ What type of changes does your code introduce? (Check all that apply)
 
 ## 🤝 Related Issues
 
-<!-- List any issues related to this PR. Link them using "Fixes #issue-number" to automatically close them when the PR is merged. -->
-
-- Fixes #
-
-## 📸 Screenshots (if applicable)
-
-<!-- If your changes include any UI updates, add screenshots here to show the changes. -->
-
----
 
 ## Reminder:
 Please ensure your pull request is made to the `test` branch, not `main`.
 
-*Thank you for contributing to VigneshDevHub! We look forward to reviewing your PR and getting it merged!*
+*Thank you for contributing to Talk-Trove! We look forward to reviewing your PR and getting it merged!*
