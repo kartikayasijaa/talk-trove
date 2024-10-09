@@ -2,8 +2,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const PasswordReset = require("../models/ResetOTPModel");
 const generateToken = require("../config/generateToken");
-const crypto = require('crypto');
-const nodemailer = require('nodemailer');
+const generateOtp = require("../config/generateOtp");
+const { sendEmail } = require("../config/emailService");
 
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -60,7 +60,7 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  // console.log(generateToken(user._id))
+
   if(!user){
     res.status(401);
     throw new Error("Invalid Email");
@@ -89,10 +89,6 @@ const forgotPass = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("User with this email does not exist");
     }
-    // Generate token
-    const generateOtp = () => {
-      return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-    };
     const resetToken = generateOtp();
     const passwordReset = new PasswordReset({
       userId: user._id,
@@ -101,30 +97,14 @@ const forgotPass = asyncHandler(async (req, res) => {
     });
     await passwordReset.save();
     
-    // console.log(`resetToken: ${resetToken}`);
+    const subject = 'Password Reset: Talk-Trove';
+    const text = `Your OTP to reset the password for your Talk-Trove account.\n\n ${resetToken}\nIf you did not request this, please ignore this email, and your password will remain unchanged.\n`;
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-
-    const otp = resetToken;
-    const mailOptions = {
-      from: process.env.EMAIL_USERNAME,
-      to: user.email,
-      subject: 'Password Reset: Talk-Trove',
-      text: `Your OTP to reset the password for your Talk-Trove account.\n\n ${otp}\nIf you did not request this, please ignore this email, and your password will remain unchanged.\n`,
-    };
-
-    await transporter.sendMail(mailOptions);
+    await sendEmail({ to: user.email, subject, text });
     res.send('OTP has been sent to your email.');
 
   }catch (err) {
     res.status(500);
-    console.log("Error:",err);
     throw new Error("Server Error");
   }
 });
