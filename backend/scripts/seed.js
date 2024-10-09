@@ -81,7 +81,7 @@ const seedDatabase = async () => {
 
   try {
 
-    await connnectDB();
+    await connectDB();
     // Create dummy users
     const users = await createDummyUsers();
 
