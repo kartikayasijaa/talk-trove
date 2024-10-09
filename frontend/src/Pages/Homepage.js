@@ -18,12 +18,11 @@ function Homepage() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
-
     if (user) navigate("/chats");
   }, []);
 
   return (
-    <Container maxW="xl" centerContent>
+    <Container maxW="xl" centerContent className="mt-4">
       <Box
         display="flex"
         justifyContent="center"
