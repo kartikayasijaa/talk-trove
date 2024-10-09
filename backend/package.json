@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "seed": "node scripts/seed.js",
     "dev": "nodemon server.js"
   },
   "author": "Kartikay Asija",
