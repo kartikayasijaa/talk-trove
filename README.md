@@ -52,10 +52,10 @@ Then follow these steps:-
 1. Make a .env file and add this
 
 ```bash
-  JWT_SECRET="" #anything
-  MONGO_URL="mongodb://127.0.0.1:27017/talk-trove" # default
-  PORT=4444 #default
-  NODE_ENV="" #findit
+  JWT_SECRET="" 
+  MONGO_URL="mongodb://127.0.0.1:27017/talk-trove" 
+  PORT=3000
+  NODE_ENV=""
 ```
 
 2. seed dummy data in database
@@ -79,7 +79,7 @@ yarn run seed
 4. Open new tab in browser and navigate to:
 
 ```bash
-  https//localhost:4444
+  https//localhost:5000
 ```
 
 ### Start the Client :
