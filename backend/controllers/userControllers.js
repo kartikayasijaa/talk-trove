@@ -20,6 +20,7 @@ const allUsers = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
+  
   const { name, email, password, pic } = req.body;
 
   if (!name || !email || !password) {
@@ -60,7 +61,7 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-
+  
   if(!user){
     res.status(401);
     throw new Error("Invalid Email");

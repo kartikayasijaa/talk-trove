@@ -64,7 +64,7 @@ const Login = () => {
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: error.response.data.message,
+        description: error.response.data?.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -115,8 +115,8 @@ const Login = () => {
         colorScheme="red"
         width="100%"
         onClick={() => {
-          setEmail("guest@example.com");
-          setPassword("123456");
+          setEmail("user1@example.com");
+          setPassword("password1");
         }}
       >
         Get Guest User Credentials

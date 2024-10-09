@@ -1,5 +1,5 @@
-import { FormControl } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
+import { FormControl } from "@chakra-ui/form-control"; // Keep only FormControl
+import { Button, Input } from "@chakra-ui/react"; // Import Button and Input from Chakra UI
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
@@ -15,6 +15,7 @@ import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
 import { axiosReq, ENDPOINT } from "../config/axios";
+
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -34,8 +35,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  const { selectedChat, setSelectedChat, user, notification, setNotification } =
-    ChatState();
+
+  const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -49,10 +50,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       setLoading(true);
 
-      const { data } = await axiosReq.get(
-        `/api/message/${selectedChat._id}`,
-        config
-      );
+      const { data } = await axiosReq.get(`/api/message/${selectedChat._id}`, config);
       setMessages(data);
       setLoading(false);
 
@@ -69,8 +67,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
-  const sendMessage = async (event) => {
-    if (event.key === "Enter" && newMessage) {
+  const sendMessage = async () => {
+    if (newMessage) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -180,9 +178,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               (!selectedChat.isGroupChat ? (
                 <>
                   {getSender(user, selectedChat.users)}
-                  <ProfileModal
-                    user={getSenderFull(user, selectedChat.users)}
-                  />
+                  <ProfileModal user={getSenderFull(user, selectedChat.users)} />
                 </>
               ) : (
                 <>
@@ -221,23 +217,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             <FormControl
-              onKeyDown={sendMessage}
+              onKeyDown={(event) => event.key === "Enter" && sendMessage()}
               id="first-name"
               isRequired
               mt={3}
+              display="flex"
+              alignItems="center"
             >
               {istyping ? (
                 <div>
                   <Lottie
                     options={defaultOptions}
-                    // height={50}
                     width={70}
                     style={{ marginBottom: 15, marginLeft: 0 }}
                   />
                 </div>
-              ) : (
-                <></>
-              )}
+              ) : null}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -245,11 +240,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
+              <Button onClick={sendMessage} colorScheme="teal" ml={2}>Send</Button> {/* Send Button */}
             </FormControl>
           </Box>
         </>
       ) : (
-        // to get socket.io on same page
         <Box display="flex" alignItems="center" justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
