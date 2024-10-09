@@ -1,22 +1,27 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { getSender } from "../config/ChatLogics";
-import ChatLoading from "./ChatLoading";
+import { useEffect } from "react";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { axiosReq } from "../config/axios";
 
-const MyChats = ({ fetchAgain }) => {
+// Function to get the name of the other user in one-on-one chat
+const getSender = (loggedUser, users) => {
+  return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
+};
 
-  const { selectedChat, setSelectedChat, user, chats, setChats,setUser } = ChatState();
+// Simple loading component
+const ChatLoading = () => (
+  <div>Loading...</div>
+);
+
+const MyChats = ({ fetchAgain }) => {
+  const { selectedChat, setSelectedChat, user, chats, setChats, setUser } = ChatState();
   const toast = useToast();
 
   const fetchChats = async () => {
-    // console.log(user._id);
     try {
       const config = {
         headers: {
@@ -41,12 +46,11 @@ const MyChats = ({ fetchAgain }) => {
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-    // eslint-disable-next-line
   }, [fetchAgain]);
 
   return (
     <Box
-      d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+      display={{ base: selectedChat ? "none" : "flex", md: "flex" }} // Hide MyChats when chat is selected on mobile
       flexDir="column"
       alignItems="center"
       p={3}
@@ -90,7 +94,7 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
-                onClick={() => setSelectedChat(chat)}
+                onClick={() => setSelectedChat(chat)} // Set selected chat on click
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
@@ -100,9 +104,7 @@ const MyChats = ({ fetchAgain }) => {
                 key={chat._id}
               >
                 <Text>
-                  {!chat.isGroupChat
-                    ? getSender(user, chat.users)
-                    : chat.chatName}
+                  {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
                 </Text>
                 {chat.latestMessage && (
                   <Text fontSize="xs">
