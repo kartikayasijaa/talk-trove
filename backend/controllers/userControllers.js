@@ -2,8 +2,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const PasswordReset = require("../models/ResetOTPModel");
 const generateToken = require("../config/generateToken");
-const generateOtp = require("../config/generateOtp");
-const { sendEmail } = require("../config/emailService");
+const generateOtp = require("../utils/helpers/generateOtp");
+const { sendEmail } = require("../utils/helpers/emailService");
 
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search

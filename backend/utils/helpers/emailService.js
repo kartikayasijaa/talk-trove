@@ -2,16 +2,23 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = async ({ to, subject, text }) => {
   try {
+    const emailUser = process.env.EMAIL_USERNAME;
+    const emailPass = process.env.EMAIL_PASSWORD;
+
+    if (!emailUser || !emailPass) {
+      throw new Error('Email credentials are not set. Please define EMAIL_USERNAME and EMAIL_PASSWORD in env variables');
+    }
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USERNAME,
+      from: emailUser,
       to,
       subject,
       text,
