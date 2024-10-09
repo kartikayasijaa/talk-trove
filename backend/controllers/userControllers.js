@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const PasswordReset = require("../models/ResetOTPModel");
 const generateToken = require("../config/generateToken");
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -93,9 +94,12 @@ const forgotPass = asyncHandler(async (req, res) => {
       return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
     };
     const resetToken = generateOtp();
-    user.resetOtp = resetToken;
-    user.resetOtpExpires = Date.now() + 3600000; // 1 hour expiry
-    await user.save();
+    const passwordReset = new PasswordReset({
+      userId: user._id,
+      otp: resetToken,
+      otpExpires: Date.now() + 3600000, // 1 hour expiry
+    });
+    await passwordReset.save();
     
     // console.log(`resetToken: ${resetToken}`);
 
@@ -129,25 +133,25 @@ const resetPass = asyncHandler(async (req, res) => {
   const { otp, password } = req.body;
 
   try {
-    const user = await User.findOne({
-      resetOtp: otp,
-      resetOtpExpires: { $gt: Date.now() }
+    const passwordReset = await PasswordReset.findOne({
+      otp: otp,
+      otpExpires: { $gt: Date.now() }
     });
 
-    if (!user) {
+    if (!passwordReset) {
       return res.status(400).send('OTP is invalid or has expired.');
     }
-
     // Update password
+    const user = await User.findById(passwordReset.userId);
     user.password = password;
-    user.resetOtp = undefined;
-    user.resetOtpExpires = undefined;
+    await PasswordReset.findOneAndDelete({ userId: user._id });
     await user.save();
 
     res.send('Password has been updated.');
 
   } catch (err) {
     res.status(500);
+    console.log(err);
     throw new Error("Server Error");
   }
 });
