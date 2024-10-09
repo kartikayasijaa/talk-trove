@@ -58,13 +58,13 @@ Then follow these steps:-
   NODE_ENV=""
 ```
 
-2. seed dummy data in database
+2. seed dummy data in database [one-time only]
 
 ```bash
-yarn run seed
+yarn seed
 ```
 
-3. run yarn command
+3. install node modules [one-time only]
 
 ```bash
   yarn
@@ -73,13 +73,13 @@ yarn run seed
 3. run yarn command
 
 ```bash
-  yarn run dev
+  yarn dev
 ```
 
 4. Open new tab in browser and navigate to:
 
 ```bash
-  https//localhost:5000
+  http://localhost:5000
 ```
 
 ### Start the Client :
@@ -94,7 +94,7 @@ yarn run seed
   REACT_APP_API_URL='http://localhost:3000'
 ```
 
-2. run yarn command
+2. Install node modules [one-time only]
 
 ```bash
   yarn
