@@ -15,17 +15,7 @@ services:
     depends_on:
       - mongo
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-
   mongo:
     image: mongo
     ports:
       - "27017:27017"
-
