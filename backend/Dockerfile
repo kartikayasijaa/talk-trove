@@ -3,11 +3,10 @@ FROM node:21
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-
-RUN yarn install
+RUN yarn
 
 COPY . .
 
 EXPOSE 5000
 
-CMD ["npx", "nodemon", "server.js"]
+CMD ["node", "server.js"]
