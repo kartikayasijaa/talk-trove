@@ -1,42 +1,29 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Box, Text } from "@chakra-ui/layout";
-import { ChatState } from "../../Context/ChatProvider";
 
-const UserListItem = ({ handleFunction,user }) => {
+const UserListItem = ({ user, handleFunction, alreadyInGroup }) => {
   return (
     <Box
       onClick={handleFunction}
-      cursor="pointer"
-      bg="#E8E8E8"
-      _hover={{
-        background: "#38B2AC",
-        color: "white",
-      }}
+      cursor={alreadyInGroup ? "not-allowed" : "pointer"}
+      bg={alreadyInGroup ? "gray.400" : "gray.100"}
+      _hover={alreadyInGroup ? {} : { background: "gray.200" }}
       w="100%"
-      display="flex"
+      d="flex"
       alignItems="center"
       color="black"
-      px={3}
-      py={2}
-      mb={2}
+      p={2}
       borderRadius="lg"
+      mb={2}
     >
-      <Avatar
-        mr={2}
-        size="sm"
-        cursor="pointer"
-        name={user.name}
-        src={user.pic}
-      />
+      <Avatar mr={2} size="sm" cursor="pointer" name={user.name} />
       <Box>
         <Text>{user.name}</Text>
-        <Text fontSize="xs">
-          <b>Email : </b>
-          {user.email}
-        </Text>
+        {alreadyInGroup && <Text fontSize="xs">Already in group</Text>}
       </Box>
     </Box>
   );
 };
+
 
 export default UserListItem;

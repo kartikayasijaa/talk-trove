@@ -16,7 +16,6 @@ import {
   IconButton,
   Spinner,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
@@ -82,9 +81,6 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         },
         config
       );
-
-      console.log(data._id);
-      // setSelectedChat("");
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setRenameLoading(false);
@@ -105,7 +101,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const handleAddUser = async (user1) => {
     if (selectedChat.users.find((u) => u._id === user1._id)) {
       toast({
-        title: "User Already in group!",
+        title: "User Already in Group!",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -260,13 +256,18 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
             {loading ? (
               <Spinner size="lg" />
             ) : (
-              searchResult?.map((user) => (
-                <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => handleAddUser(user)}
-                />
-              ))
+              searchResult?.map((user) => {
+                const isUserInGroup = selectedChat.users.some((u) => u._id === user._id);
+
+                return (
+                  <UserListItem
+                    key={user._id}
+                    user={user}
+                    handleFunction={isUserInGroup ? null : () => handleAddUser(user)}
+                    alreadyInGroup={isUserInGroup}
+                  />
+                );
+              })
             )}
           </ModalBody>
           <ModalFooter>
