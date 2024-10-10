@@ -3,7 +3,6 @@ import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosReq } from "../../config/axios";
@@ -16,16 +15,43 @@ const Signup = () => {
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
+  const [emailError, setEmailError] = useState(false);
   const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
 
+  const validateEmail = (email) => {
+    const emailExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailExp.test(email);
+  };
+
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setEmail(emailValue);
+
+    if (!validateEmail(emailValue)) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  };
+
   const submitHandler = async () => {
+    if (emailError || !validateEmail(email)) {
+      toast({
+        title: "Please enter a valid email address",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword) {
       toast({
-        title: "Please Fill all the Feilds",
+        title: "Please fill all the fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -44,7 +70,6 @@ const Signup = () => {
       });
       return;
     }
-    console.log(name, email, password, pic);
     try {
       const config = {
         headers: {
@@ -97,7 +122,6 @@ const Signup = () => {
       });
       return;
     }
-    console.log(pics);
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
@@ -144,7 +168,7 @@ const Signup = () => {
         <Input
           type="email"
           placeholder="Enter Your Email Address"
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
         />
       </FormControl>
       <FormControl id="password" isRequired>
