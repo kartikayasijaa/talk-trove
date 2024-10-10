@@ -36,6 +36,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: ["http://localhost:3000", "https://chat-app-two-theta-52.vercel.app", "https://chatapi.gitleet.live"],
+    credentials: true,  // Allow credentials
   },
 });
 
