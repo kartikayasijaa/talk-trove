@@ -20,6 +20,10 @@ const allUsers = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
+<<<<<<< HEAD
+=======
+  
+>>>>>>> be56316e4935f90c182df5aefe35f49a868ca9e0
   const { name, email, password, pic } = req.body;
 
   if (!name || !email || !password) {
@@ -60,7 +64,11 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> be56316e4935f90c182df5aefe35f49a868ca9e0
   if(!user){
     res.status(401);
     throw new Error("Invalid Email");
