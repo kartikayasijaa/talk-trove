@@ -24,7 +24,7 @@ import { axiosReq } from "../../config/axios";
 
 const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [groupChatName, setGroupChatName] = useState();
+  const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -47,12 +47,14 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
         },
       };
       const { data } = await axiosReq.get(`/api/user?search=${search}`, config);
-      console.log(data);
       setLoading(false);
-      setSearchResult(data);
+      const filteredUsers = data.filter(
+        (searchUser) => !selectedChat.users.find((u) => u._id === searchUser._id)
+      );
+      setSearchResult(filteredUsers);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: "Failed to Load the Search Results",
         status: "error",
         duration: 5000,
@@ -86,7 +88,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setRenameLoading(false);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -142,7 +144,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setLoading(false);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -188,7 +190,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       setLoading(false);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -256,18 +258,14 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
             {loading ? (
               <Spinner size="lg" />
             ) : (
-              searchResult?.map((user) => {
-                const isUserInGroup = selectedChat.users.some((u) => u._id === user._id);
-
-                return (
-                  <UserListItem
-                    key={user._id}
-                    user={user}
-                    handleFunction={isUserInGroup ? null : () => handleAddUser(user)}
-                    alreadyInGroup={isUserInGroup}
-                  />
-                );
-              })
+              searchResult?.map((user) => (
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => handleAddUser(user)}
+                  alreadyInGroup={selectedChat.users.some((u) => u._id === user._id)}
+                />
+              ))
             )}
           </ModalBody>
           <ModalFooter>
