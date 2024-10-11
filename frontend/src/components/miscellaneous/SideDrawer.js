@@ -12,6 +12,7 @@ import {
 import {
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
@@ -133,15 +134,15 @@ function SideDrawer() {
         borderWidth="5px"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-          <Button variant="ghost" onClick={onOpen}>
+          <Button variant="solid" onClick={onOpen} colorScheme="blue">
             <i className="fas fa-search"></i>
             <Text d={{ base: "none", md: "flex" }} px={4}>
-              Search User
+              Search
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize="2xl" fontFamily="Work sans">
-          Chat
+        <Text fontSize="2xl" fontFamily="Work sans" fontWeight="semibold">
+          Talk Trove
         </Text>
         <div>
           <Menu>
@@ -192,7 +193,10 @@ function SideDrawer() {
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">
+            Search
+            <DrawerCloseButton marginTop={2}/>
+          </DrawerHeader>
           <DrawerBody>
             <Box display="flex" pb={2}>
               <Input
@@ -201,7 +205,7 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button onClick={handleSearch}>Go</Button>
+              <Button onClick={handleSearch} colorScheme="blue"><i className="fas fa-search"></i></Button>
             </Box>
             {loading ? (
               <ChatLoading />

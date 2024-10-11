@@ -245,10 +245,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </>
       ) : (
-        <Box display="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
+        <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" h="100%">
+          <Text fontSize="3xl" pb={3} fontFamily="Work sans" fontWeight="semibold">
+            Just <Button>tap</Button> someone to start Chats... <br/>or create <Button>new Group Chats</Button>
           </Text>
+          
         </Box>
       )}
     </>
