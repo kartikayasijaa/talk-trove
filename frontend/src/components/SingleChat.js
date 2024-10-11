@@ -1,3 +1,4 @@
+import { BsEmojiSmile } from "react-icons/bs";
 import { FormControl } from "@chakra-ui/form-control"; // Keep only FormControl
 import { Button, Input } from "@chakra-ui/react"; // Import Button and Input from Chakra UI
 import { Box, Text } from "@chakra-ui/layout";
@@ -10,6 +11,8 @@ import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
+import EmojiPicker from "emoji-picker-react";
+
 
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
@@ -19,6 +22,7 @@ import { axiosReq, ENDPOINT } from "../config/axios";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -100,6 +104,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
+const handleEmojiClick = (emojiObject) => {
+  setNewMessage(newMessage + emojiObject.emoji); // Correct usage to append emoji
+};
+
+const toggleEmojiPicker = () => {
+  setShowEmojiPicker(!showEmojiPicker); // Toggle the visibility of emoji picker
+};
+
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -233,6 +245,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   />
                 </div>
               ) : null}
+<Button onClick={toggleEmojiPicker} ml={2}>
+  <BsEmojiSmile size={24} /> 
+</Button>
+              {showEmojiPicker && (
+                <div style={{ position: "absolute", bottom: "60px", zIndex: 100 }}>
+                <EmojiPicker onEmojiClick={handleEmojiClick} />
+
+                </div>
+              )} 
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -254,5 +275,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     </>
   );
 };
+
 
 export default SingleChat;
