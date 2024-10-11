@@ -13,7 +13,6 @@ import {
   useToast,
   Box,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
@@ -78,11 +77,10 @@ const GroupChatModal = ({ children }) => {
   const handleDelete = (delUser) => {
     setSelectedUsers(selectedUsers.filter((sel) => sel._id !== delUser._id));
   };
-
   const handleSubmit = async () => {
-    if (!groupChatName || !selectedUsers) {
+    if (!groupChatName || selectedUsers.length === 0) {
       toast({
-        title: "Please fill all the feilds",
+        title: "Please fill all the fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -114,6 +112,8 @@ const GroupChatModal = ({ children }) => {
         isClosable: true,
         position: "bottom",
       });
+      setGroupChatName("");
+      setSelectedUsers([]);
     } catch (error) {
       toast({
         title: "Failed to Create the Chat!",

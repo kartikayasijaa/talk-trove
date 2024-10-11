@@ -16,7 +16,6 @@ import {
   IconButton,
   Spinner,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
 import { ChatState } from "../../Context/ChatProvider";
 import UserBadgeItem from "../userAvatar/UserBadgeItem";
@@ -31,9 +30,12 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(false);
   const [renameloading, setRenameLoading] = useState(false);
   const toast = useToast();
-
   const { selectedChat, setSelectedChat, user } = ChatState();
 
+  const handleModalOpen = () => {
+    setSelectedChat(null);
+    onOpen();
+  };
   const handleSearch = async (query) => {
     setSearch(query);
     if (!query) {
@@ -206,7 +208,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
 
   return (
     <>
-      <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+      <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={handleModalOpen} />
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
