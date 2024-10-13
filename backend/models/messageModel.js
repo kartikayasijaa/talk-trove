@@ -9,7 +9,11 @@ const messageSchema = mongoose.Schema(
     reactions: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        reaction: { type: String }, // Reaction type (like, love, etc.)
+        reaction: { 
+          type: String, 
+          enum: ['like', 'love', 'sad', 'angry', 'laugh'], // Specify reaction types
+          required: true 
+        },
       },
     ],
   },

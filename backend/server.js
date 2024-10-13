@@ -1,18 +1,18 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
+const cors = require("cors");
+const path = require("path");
+const Message = require("./models/messageModel"); // Import your Message model
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
-const path = require("path");
-const cors = require("cors");
-const Message = require("./models/messageModel");  // Import your Message model
 
 dotenv.config();
 connectDB();
-const app = express();
 
+const app = express();
 app.use(express.json());
 app.use(cors());
 
@@ -36,8 +36,11 @@ const server = app.listen(
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ["http://localhost:3000", "https://chat-app-two-theta-52.vercel.app", "https://chatapi.gitleet.live"],
-    credentials: true,
+    origin: [
+      "http://localhost:3000",
+      "https://chat-app-two-theta-52.vercel.app",
+      "https://chatapi.gitleet.live",
+    ],
   },
 });
 
@@ -72,7 +75,6 @@ io.on("connection", (socket) => {
   // New event for reacting to a message
   socket.on("reactMessage", async ({ messageId, userId, reaction }) => {
     try {
-      // Find the message and update reactions
       const updatedMessage = await Message.findByIdAndUpdate(
         messageId,
         {
@@ -84,12 +86,13 @@ io.on("connection", (socket) => {
       // Emit the updated message with reactions to all clients
       socket.broadcast.emit("messageReaction", updatedMessage);
     } catch (error) {
-      console.log("Error in reacting to message:", error);
+      console.error("Error in reacting to message:", error); // Improved error logging
     }
   });
 
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
+  socket.on("disconnect", () => {
+    console.log("User disconnected");
     socket.leave(userData._id);
+    // Clean up other socket listeners if needed
   });
 });

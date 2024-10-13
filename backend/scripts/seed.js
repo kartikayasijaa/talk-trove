@@ -1,7 +1,7 @@
 const connectDB = require("../config/db");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-dotenv.config();
+require('dotenv').config();
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel"); // Adjust the path according to your project structure
 const Chat = require("../models/chatModel");

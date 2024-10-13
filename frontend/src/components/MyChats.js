@@ -1,28 +1,21 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Box, Stack, Text, Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
-import { useEffect, useState } from "react"; // Added useState
+import { useEffect, useState } from "react"; 
 import GroupChatModal from "./miscellaneous/GroupChatModal";
-import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { axiosReq } from "../config/axios";
-import { socket } from "../path/to/socket"; // Import your socket instance
+import socket from '../socket'; // Correct this line
 
-// Function to get the name of the other user in one-on-one chat
 const getSender = (loggedUser, users) => {
   return users[0]._id === loggedUser._id ? users[1].name : users[0].name;
 };
 
-// Simple loading component
-const ChatLoading = () => (
-  <div>Loading...</div>
-);
+const ChatLoading = () => <div>Loading...</div>;
 
 const MyChats = ({ fetchAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats, setUser } = ChatState();
   const toast = useToast();
-  
-  // Added reactions state
   const [reactions, setReactions] = useState({});
 
   const fetchChats = async () => {
@@ -32,7 +25,6 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-
       const { data } = await axiosReq.get("/api/chat", config);
       setChats(data);
     } catch (error) {
@@ -50,8 +42,7 @@ const MyChats = ({ fetchAgain }) => {
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-    
-    // Listen for incoming reactions
+
     socket.on('messageReaction', ({ messageId, reaction }) => {
       setReactions((prev) => ({
         ...prev,
@@ -59,20 +50,18 @@ const MyChats = ({ fetchAgain }) => {
       }));
     });
 
-    // Cleanup the socket listener on component unmount
     return () => {
       socket.off('messageReaction');
     };
   }, [fetchAgain]);
 
-  // Handle reaction submission
   const handleReaction = (messageId, reaction) => {
-    socket.emit('reactMessage', { messageId, reaction });
+    socket.emit('reactMessage', { messageId, userId: user._id, reaction });
   };
 
   return (
     <Box
-      display={{ base: selectedChat ? "none" : "flex", md: "flex" }} // Hide MyChats when chat is selected on mobile
+      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
       p={3}
@@ -86,7 +75,7 @@ const MyChats = ({ fetchAgain }) => {
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
         fontFamily="Work sans"
-        display={'flex'}
+        display="flex"
         w="100%"
         justifyContent="space-between"
         alignItems="center"
@@ -116,7 +105,7 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
-                onClick={() => setSelectedChat(chat)} // Set selected chat on click
+                onClick={() => setSelectedChat(chat)} 
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
@@ -130,14 +119,17 @@ const MyChats = ({ fetchAgain }) => {
                 </Text>
                 {chat.latestMessage && (
                   <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
+                    <b>{chat.latestMessage.sender.name}: </b>
                     {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
+                      ? `${chat.latestMessage.content.substring(0, 51)}...`
                       : chat.latestMessage.content}
-                    {/* Added reaction display */}
-                    {reactions[chat.latestMessage._id] && <span>{reactions[chat.latestMessage._id]}</span>}
-                    <button onClick={() => handleReaction(chat.latestMessage._id, '👍')}>👍</button>
-                    <button onClick={() => handleReaction(chat.latestMessage._id, '❤️')}>❤️</button>
+                    {/* Reaction Display */}
+                    {reactions[chat.latestMessage._id] && (
+                      <span>{reactions[chat.latestMessage._id]}</span>
+                    )}
+                    {/* Reaction Buttons */}
+                    <Button size="xs" onClick={() => handleReaction(chat.latestMessage._id, '👍')}>👍</Button>
+                    <Button size="xs" onClick={() => handleReaction(chat.latestMessage._id, '❤️')}>❤️</Button>
                   </Text>
                 )}
               </Box>
