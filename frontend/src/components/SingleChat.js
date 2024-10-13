@@ -5,7 +5,7 @@ import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
@@ -16,6 +16,8 @@ import EmojiPicker from "emoji-picker-react";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
+
+//import { ChatState, ChatContext } from "../Context/ChatProvider";
 import { axiosReq, ENDPOINT } from "../config/axios";
 
 var socket, selectedChatCompare;
@@ -30,6 +32,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
 
+  const { selectedChat, setSelectedChat, user, notification, setNotification,mutedChats } = ChatState();
+ // const { mutedChats } = useContext(ChatContext); // Access mutedChats from context
+
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -38,9 +43,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-
-  const { selectedChat, setSelectedChat, user, notification, setNotification } =
-    ChatState();
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -60,8 +62,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
       setMessages(data);
       setLoading(false);
-
-      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -121,32 +121,39 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     fetchMessages();
 
     selectedChatCompare = selectedChat;
-    // eslint-disable-next-line
   }, [selectedChat]);
-
+  
+  const updateNotification = (newMessageReceived) => {
+    if (!notification.includes(newMessageReceived) && (!mutedChats[newMessageReceived.chat._id])) {
+    setNotification([newMessageReceived, ...notification]);
+    setFetchAgain(!fetchAgain);
+    }
+    }
   useEffect(() => {
-    socket.on("message recieved", (newMessageRecieved) => {
-      if (
-        !selectedChatCompare || // if chat is not selected or doesn't match current chat
-        selectedChatCompare._id !== newMessageRecieved.chat._id
-      ) {
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification]);
-          setFetchAgain(!fetchAgain);
+    socket.on("message received", (newMessageReceived) => {
+      // Check if the chat is muted before showing a notification
+        if (
+          !selectedChatCompare || // if chat is not selected or doesn't match current chat
+          selectedChatCompare._id !== newMessageReceived.chat._id
+        ) {
+          updateNotification(newMessageReceived)
+        } else {
+          setMessages([...messages, newMessageReceived]);
         }
-      } else {
-        setMessages([...messages, newMessageRecieved]);
       }
-    });
-  });
+      //
+    );
+
+    return () => {
+      socket.off("message received");
+    };
+  }, [mutedChats, selectedChatCompare, notification, fetchAgain]);
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);

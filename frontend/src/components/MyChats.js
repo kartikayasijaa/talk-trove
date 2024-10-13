@@ -1,9 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Box, Stack, Text, Button } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
-import { useEffect } from "react";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
-import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 import { axiosReq } from "../config/axios";
 
@@ -13,12 +12,11 @@ const getSender = (loggedUser, users) => {
 };
 
 // Simple loading component
-const ChatLoading = () => (
-  <div>Loading...</div>
-);
+const ChatLoading = () => <div>Loading...</div>;
 
 const MyChats = ({ fetchAgain }) => {
   const { selectedChat, setSelectedChat, user, chats, setChats, setUser } = ChatState();
+  const [mutedChats, setMutedChats] = useState({});
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -28,13 +26,44 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-
       const { data } = await axiosReq.get("/api/chat", config);
       setChats(data);
+
+      // Initialize mute status for all chats
+      const muteStatus = {};
+      data.forEach((chat) => {
+        muteStatus[chat._id] = chat.isMuted; // Assuming the 'isMuted' status is fetched with chat data
+      });
+      setMutedChats(muteStatus);
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: "Failed to Load the chats",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const toggleMute = async (chatId, isMuted) => {
+    try {
+      const endpoint = isMuted ? `/api/chat/unmute/${chatId}` : `/api/chat/mute/${chatId}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axiosReq.put(endpoint, {}, config);
+
+      // Update the mute status locally after the API call
+      setMutedChats((prev) => ({ ...prev, [chatId]: !isMuted }));
+    } catch (error) {
+      console.error('Failed to toggle mute', error);
+      toast({
+        title: "Error Occurred!",
+        description: "Failed to update mute status",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -50,7 +79,7 @@ const MyChats = ({ fetchAgain }) => {
 
   return (
     <Box
-      display={{ base: selectedChat ? "none" : "flex", md: "flex" }} // Hide MyChats when chat is selected on mobile
+      display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
       alignItems="center"
       p={3}
@@ -94,7 +123,7 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
-                onClick={() => setSelectedChat(chat)} // Set selected chat on click
+                onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
                 bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                 color={selectedChat === chat ? "white" : "black"}
@@ -102,18 +131,32 @@ const MyChats = ({ fetchAgain }) => {
                 py={2}
                 borderRadius="lg"
                 key={chat._id}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                <Text>
-                  {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
-                </Text>
-                {chat.latestMessage && (
-                  <Text fontSize="xs">
-                    <b>{chat.latestMessage.sender.name} : </b>
-                    {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
+                <Box>
+                  <Text>
+                    {!chat.isGroupChat ? getSender(user, chat.users) : chat.chatName}
                   </Text>
-                )}
+                  {chat.latestMessage && (
+                    <Text fontSize="xs">
+                      <b>{chat.latestMessage.sender.name} : </b>
+                      {chat.latestMessage.content.length > 50
+                        ? chat.latestMessage.content.substring(0, 51) + "..."
+                        : chat.latestMessage.content}
+                    </Text>
+                  )}
+                </Box>
+                <Button
+                  size="xs"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering chat selection
+                    toggleMute(chat._id, mutedChats[chat._id]);
+                  }}
+                >
+                  {mutedChats[chat._id] ? 'Unmute' : 'Mute'}
+                </Button>
               </Box>
             ))}
           </Stack>
