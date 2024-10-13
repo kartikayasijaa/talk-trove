@@ -6,9 +6,16 @@ const messageSchema = mongoose.Schema(
     content: { type: String, trim: true },
     chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
     readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    reactions: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        reaction: { type: String }, // Reaction type (like, love, etc.)
+      },
+    ],
   },
   { timestamps: true }
 );
 
 const Message = mongoose.model("Message", messageSchema);
+
 module.exports = Message;
