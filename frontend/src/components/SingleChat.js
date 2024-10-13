@@ -129,24 +129,26 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
   
-
+  const updateNotification = (newMessageReceived) => {
+    if (!notification.includes(newMessageReceived) && (!mutedChats[newMessageReceived.chat._id])) {
+    setNotification([newMessageReceived, ...notification]);
+    setFetchAgain(!fetchAgain);
+    }
+    }
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
       // Check if the chat is muted before showing a notification
-      if (!mutedChats[newMessageReceived.chat._id]) {
         if (
           !selectedChatCompare || // if chat is not selected or doesn't match current chat
           selectedChatCompare._id !== newMessageReceived.chat._id
         ) {
-          if (!notification.includes(newMessageReceived)) {
-            setNotification([newMessageReceived, ...notification]);
-            setFetchAgain(!fetchAgain);
-          }
+          updateNotification(newMessageReceived)
         } else {
           setMessages([...messages, newMessageReceived]);
         }
       }
-    });
+      //
+    );
 
     return () => {
       socket.off("message received");
