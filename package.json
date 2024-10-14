@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "prepare": "huksy install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
+  "dependencies": {
+    "lint-staged": "^15.2.10"
+  }
+}
