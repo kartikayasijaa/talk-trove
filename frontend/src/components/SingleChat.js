@@ -1,3 +1,4 @@
+import { BsEmojiSmile } from "react-icons/bs";
 import { FormControl } from "@chakra-ui/form-control"; // Keep only FormControl
 import { Button, Input } from "@chakra-ui/react"; // Import Button and Input from Chakra UI
 import { Box, Text } from "@chakra-ui/layout";
@@ -10,6 +11,7 @@ import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
+import EmojiPicker from "emoji-picker-react";
 
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
@@ -19,6 +21,7 @@ import { axiosReq, ENDPOINT } from "../config/axios";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -36,7 +39,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     },
   };
 
-  const { selectedChat, setSelectedChat, user, notification, setNotification } = ChatState();
+  const { selectedChat, setSelectedChat, user, notification, setNotification } =
+    ChatState();
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -50,7 +54,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       setLoading(true);
 
-      const { data } = await axiosReq.get(`/api/message/${selectedChat._id}`, config);
+      const { data } = await axiosReq.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
       setMessages(data);
       setLoading(false);
 
@@ -99,6 +106,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         });
       }
     }
+  };
+  const handleEmojiClick = (emojiObject) => {
+    setNewMessage(newMessage + emojiObject.emoji);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((emoji) => !emoji);
   };
 
   useEffect(() => {
@@ -178,7 +192,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               (!selectedChat.isGroupChat ? (
                 <>
                   {getSender(user, selectedChat.users)}
-                  <ProfileModal user={getSenderFull(user, selectedChat.users)} />
+                  <ProfileModal
+                    user={getSenderFull(user, selectedChat.users)}
+                  />
                 </>
               ) : (
                 <>
@@ -233,6 +249,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   />
                 </div>
               ) : null}
+              <Button onClick={toggleEmojiPicker} ml={2}>
+                <BsEmojiSmile size={24} />
+              </Button>
+              {showEmojiPicker && (
+                <div
+                  style={{ position: "absolute", bottom: "60px", zIndex: 100 }}
+                >
+                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                </div>
+              )}
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -240,12 +266,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
-              <Button onClick={sendMessage} colorScheme="teal" ml={2}>Send</Button> {/* Send Button */}
+              <Button onClick={sendMessage} colorScheme="teal" ml={2}>
+                Send
+              </Button>{" "}
+              {/* Send Button */}
             </FormControl>
           </Box>
         </>
       ) : (
-        <Box display="flex" alignItems="center" justifyContent="center" h="100%">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          h="100%"
+        >
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
           </Text>

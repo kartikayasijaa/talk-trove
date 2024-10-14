@@ -49,37 +49,30 @@ Then follow these steps:-
   cd backend
 ```
 
-1. Make a .env file and add this
+1. Make a .env file and copy the content from ```.env.sample```
+
+2. Seed dummy data in database [one-time only]
 
 ```bash
-  JWT_SECRET="" 
-  MONGO_URL="mongodb://127.0.0.1:27017/talk-trove" 
-  PORT=3000
-  NODE_ENV=""
+yarn seed
 ```
 
-2. seed dummy data in database
-
-```bash
-yarn run seed
-```
-
-3. run yarn command
+3. Install node modules [one-time only]
 
 ```bash
   yarn
 ```
 
-3. run yarn command
+3. Run yarn command
 
 ```bash
-  yarn run dev
+  yarn dev
 ```
 
 4. Open new tab in browser and navigate to:
 
 ```bash
-  https//localhost:5000
+  http://localhost:5000
 ```
 
 ### Start the Client :
@@ -88,19 +81,15 @@ yarn run seed
   cd frontend
 ```
 
-1. Make .env and add this:
+1. Make .env and copy the content from ```.env.sample```
 
-```bash
-  REACT_APP_API_URL='http://localhost:3000'
-```
-
-2. run yarn command
+2. Install node modules [one-time only]
 
 ```bash
   yarn
 ```
 
-3. run yarn command
+3. Run yarn command
 
 ```bash
   yarn start
