@@ -1,13 +1,32 @@
-# Chat-App
+# Chat-App 💬
+This is a **Full Stack Chatting App** that enables real-time communication. It uses Socket.io for instant messaging and securely stores user details in MongoDB with encryption 🔐
 
-It is a Full Stack Chatting App.
-Uses Socket.io for real-time communication and stores user details in encrypted format in Mongo DB Database.
+<table align="center">
+    <thead align="center">
+        <tr border: 2px;>
+            <td><b>🌟 Stars</b></td>
+            <td><b>🍴 Forks</b></td>
+            <td><b>🐛 Issues</b></td>
+            <td><b>🔔 Open PRs</b></td>
+            <td><b>🔕 Close PRs</b></td>
+        </tr>
+     </thead>
+    <tbody>
+         <tr>
+            <td><img alt="Stars" src="https://img.shields.io/github/stars/kartikayasijaa/talk-trove?style=flat&logo=github"/></td>
+             <td><img alt="Forks" src="https://img.shields.io/github/forks/kartikayasijaa/talk-trove?style=flat&logo=github"/></td>
+            <td><img alt="Issues" src="https://img.shields.io/github/issues/kartikayasijaa/talk-trove?style=flat&logo=github"/></td>
+            <td><img alt="Open Pull Requests" src="https://img.shields.io/github/issues-pr/kartikayasijaa/talk-trove?style=flat&logo=github"/></td>
+           <td><img alt="Close Pull Requests" src="https://img.shields.io/github/issues-pr-closed/kartikayasijaa/talk-trove?style=flat&color=critical&logo=github"/></td>
+        </tr>
+    </tbody>
+</table>
 
-## Demo:-
+## Demo 🔄
 
 https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a417-d3868f213c8c
 
-## Tech Stack:-
+## Tech Stack 💻
 
 ![React](https://img.shields.io/badge/Client-React%20JS-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 
@@ -19,15 +38,22 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## What I learned through this Project?
 
-- Web Sockets and Socket.IO: Throughout this project, I learned about Web Sockets and their implementation using Socket.io. Including broadcasting messages to multiple clients, handling different events, implementing acknowledgments, and handling disconnect and error events.
-- Context API: I also learned about the Context API as part of this project. I gained an understanding of how to use it in React to manage global state and share data between components without the need for prop drilling
-- UI with Chakra UI: I learned to build a user-friendly UI design using Chakra UI.
+## What I Learned Through This Project? 🤔💡
 
-## First Read [Contributing.md](https://github.com/kartikayasijaa/talk-trove/blob/main/Contributing.md) to follow open-source guidelines
+- **Web Sockets and Socket.IO**:  
+  I explored the world of **Web Sockets** 🌐 and implemented real-time communication using **Socket.io**. I gained hands-on experience with broadcasting messages 📡 to multiple clients, managing various events, implementing acknowledgments ✅, and handling disconnect 🔌 and error ⚠️ events effectively.
 
-## Project initialization locally:-
+- **Context API**:  
+  I deepened my understanding of the **Context API** 🛠️ in React. I learned how to use it to manage global state 🌍 and share data between components seamlessly, without the hassle of prop drilling 🔄.
+
+- **UI with Chakra UI**:  
+  I built a clean and user-friendly UI 🎨 using **Chakra UI**. This helped me develop skills in designing intuitive interfaces that are both visually appealing and highly responsive 📱.
+
+
+### First Read [Contributing.md](https://github.com/kartikayasijaa/talk-trove/blob/main/Contributing.md) to follow open-source guidelines
+
+## Project initialization locally 🛠️
 
 ### Make sure yarn is installed in your system if not use this command:-
 
@@ -95,7 +121,7 @@ yarn seed
   yarn start
 ```
 
-## 👀 Our Contributors
+## Our Contributors 👀
 
 - We extend our heartfelt gratitude for your invaluable contribution to our project! Your efforts play a pivotal role in elevating Ratna-Supermarket to greater heights.
 - Make sure you show some love by giving ⭐ to our repository.
@@ -107,4 +133,9 @@ yarn seed
   </a>
 </div>
 
-### Made with love 💖
+## Star the Repo! 🌟
+
+If you find this project helpful or interesting, please consider giving it a star! Your support motivates me to keep improving and adding new features. Thank you! 🙏
+
+<h3 align="center"> Made with love ❤️</h3>
+<h3 align="center"> Keep exploring and contributing!🌟🚀 </h3>
