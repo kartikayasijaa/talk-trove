@@ -1,0 +1,36 @@
+name: Close Old Issues
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  
+
+permissions:
+  issues: write  
+jobs:
+  close-old-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Issues Older Than 30 Days
+        uses: actions/github-script@v6  
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const daysOld = 30; // Customize the number of days to consider "old"
+            const daysAgo = new Date(Date.now() - (1000 * 60 * 60 * 24 * daysOld));
+
+            const { data: issues } = await github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              since: daysAgo.toISOString(),
+            });
+
+            for (const issue of issues) {
+              console.log(`Closing issue #${issue.number} (last updated: ${issue.updated_at})`);
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+              });
+            }
