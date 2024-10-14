@@ -256,9 +256,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <div
                   style={{ position: "absolute", bottom: "60px", zIndex: 100 }}
                 >
-                  <EmojiPicker
-                    onEmojiClick={(event) => handleEmojiClick(event)}
-                  />
+                  <EmojiPicker onEmojiClick={handleEmojiClick} />
                 </div>
               )}
               <Input
