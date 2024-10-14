@@ -50,7 +50,7 @@ If you found a bug or have a suggestion, [create a new issue](https://github.co
 5. Add your changes To add your changes, run the following command in your terminal:
     
     ```
-    git add <File1 changed> <File2 changed> ...
+    git add .
     ```
     
 6. Commit your changes. To commit your changes, run the following command in your terminal:
