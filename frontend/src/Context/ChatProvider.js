@@ -8,7 +8,6 @@ const ChatProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState();
-  console.log("this is testing purpose");
 
   const navigate = useNavigate();
 
