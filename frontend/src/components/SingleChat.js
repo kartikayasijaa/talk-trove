@@ -108,7 +108,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
   const handleEmojiClick = (emojiObject) => {
-    setNewMessage(newMessage + emojiObject.emoji);
+    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
   };
 
   const toggleEmojiPicker = () => {
@@ -256,7 +256,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <div
                   style={{ position: "absolute", bottom: "60px", zIndex: 100 }}
                 >
-                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                  <EmojiPicker
+                    onEmojiClick={(event) => handleEmojiClick(event)}
+                  />
                 </div>
               )}
               <Input
