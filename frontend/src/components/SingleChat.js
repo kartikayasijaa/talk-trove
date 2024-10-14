@@ -108,7 +108,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
   const handleEmojiClick = (emojiObject) => {
-    setNewMessage(newMessage + emojiObject.emoji);
+    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
   };
 
   const toggleEmojiPicker = () => {
