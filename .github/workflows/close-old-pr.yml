@@ -1,0 +1,36 @@
+name: Close Old Pull Requests
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  
+
+permissions:
+  pull-requests: write  
+jobs:
+  close-old-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close Pull Requests Older Than 30 Days
+        uses: actions/github-script@v6  
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const daysOld = 30; // Customize the number of days to consider "old"
+            const daysAgo = new Date(Date.now() - (1000 * 60 * 60 * 24 * daysOld));
+
+            const { data: prs } = await github.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              since: daysAgo.toISOString(),
+            });
+
+            for (const pr of prs) {
+              console.log(`Closing pull request #${pr.number} (last updated: ${pr.updated_at})`);
+              await github.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                state: 'closed',
+              });
+            }
