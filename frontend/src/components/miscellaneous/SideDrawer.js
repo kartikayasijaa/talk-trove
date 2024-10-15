@@ -21,7 +21,6 @@ import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
@@ -38,6 +37,7 @@ function SideDrawer() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
+  const [contacts, setContacts] = useState([]);
 
   const {
     setSelectedChat,
@@ -49,12 +49,42 @@ function SideDrawer() {
   } = ChatState();
 
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen,
+    onOpen: onSearchOpen,
+    onClose: onSearchClose,
+  } = useDisclosure();
+  const {
+    isOpen: isContactsOpen,
+    onOpen: onContactsOpen,
+    onClose: onContactsClose,
+  } = useDisclosure();
   const navigate = useNavigate();
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     navigate("/");
+  };
+
+  const fetchContacts = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axiosReq.get(`/api/user`, config);
+      setContacts(data); // Set fetched contacts to state
+    } catch (error) {
+      toast({
+        title: "Error fetching contacts",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
   };
 
   const handleSearch = async () => {
@@ -108,7 +138,7 @@ function SideDrawer() {
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
       setLoadingChat(false);
-      onClose();
+      onSearchClose();
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -119,6 +149,12 @@ function SideDrawer() {
         position: "bottom-left",
       });
     }
+  };
+
+  // Fetch contacts when Contacts Drawer is opened
+  const handleContactsOpen = () => {
+    onContactsOpen();
+    fetchContacts();
   };
 
   return (
@@ -132,14 +168,32 @@ function SideDrawer() {
         p="5px 10px 5px 10px"
         borderWidth="5px"
       >
-        <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-          <Button variant="ghost" onClick={onOpen}>
-            <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4}>
-              Search User
-            </Text>
-          </Button>
-        </Tooltip>
+        <Box display="flex" gap="20px">
+          <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
+            <Button variant="ghost" onClick={onSearchOpen}>
+              <i className="fas fa-search"></i>
+              <Text d={{ base: "none", md: "flex" }} px={4}>
+                Search User
+              </Text>
+            </Button>
+          </Tooltip>
+
+          <Tooltip
+            label="View all the Contacts"
+            hasArrow
+            placement="bottom-end"
+          >
+            <Button
+              onClick={handleContactsOpen}
+              display={{ base: "none", md: "flex" }}
+            >
+              <Text d={{ base: "none", md: "flex" }} px={3}>
+                Contacts
+              </Text>
+            </Button>
+          </Tooltip>
+        </Box>
+
         <Text fontSize="2xl" fontFamily="Work sans">
           Chat
         </Text>
@@ -182,6 +236,12 @@ function SideDrawer() {
               <ProfileModal user={user}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
+              <MenuItem
+                display={{ base: "block", md: "none" }}
+                onClick={handleContactsOpen}
+              >
+                Contacts
+              </MenuItem>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>
@@ -189,7 +249,8 @@ function SideDrawer() {
         </div>
       </Box>
 
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+      {/* Search Users Drawer */}
+      <Drawer placement="left" onClose={onSearchClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
@@ -215,6 +276,31 @@ function SideDrawer() {
               ))
             )}
             {loadingChat && <Spinner ml="auto" display="flex" />}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Contacts Drawer */}
+      <Drawer
+        placement="left"
+        onClose={onContactsClose}
+        isOpen={isContactsOpen}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth="1px">Contacts</DrawerHeader>
+          <DrawerBody>
+            {contacts.length ? (
+              contacts.map((contact) => (
+                <UserListItem
+                  key={contact._id}
+                  user={contact}
+                  handleFunction={() => accessChat(contact._id)}
+                />
+              ))
+            ) : (
+              <Text>No contacts available.</Text>
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
