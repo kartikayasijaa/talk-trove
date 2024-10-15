@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
@@ -151,11 +152,24 @@ function SideDrawer() {
     }
   };
 
+
   // Fetch contacts when Contacts Drawer is opened
   const handleContactsOpen = () => {
     onContactsOpen();
     fetchContacts();
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
+        handleSearch();
+      } else {
+        setSearchResult([]); // Clear search results when search is empty
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search]); // Effect runs when 'search' changes
 
   return (
     <>
@@ -262,7 +276,7 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <Button onClick={handleSearch}>Go</Button>
+              {/* <Button onClick={handleSearch}>X</Button> */}
             </Box>
             {loading ? (
               <ChatLoading />

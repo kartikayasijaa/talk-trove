@@ -1,6 +1,6 @@
 import { BsEmojiSmile } from "react-icons/bs";
-import { FormControl } from "@chakra-ui/form-control"; // Keep only FormControl
-import { Button, Input } from "@chakra-ui/react"; // Import Button and Input from Chakra UI
+import { FormControl } from "@chakra-ui/form-control";
+import { Button, Input } from "@chakra-ui/react";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
@@ -107,6 +107,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
+
   const handleEmojiClick = (emojiObject) => {
     setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
   };
@@ -229,6 +230,24 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
               <div className="messages">
                 <ScrollableChat messages={messages} />
+                {istyping && (
+                  <div
+                    style={{
+                      padding: "5px",
+                      marginTop: "2px",
+                      marginLeft: "5px",
+                      borderRadius: "10px",
+                      display: "inline-block",
+                    }}
+                  >
+                    <Lottie
+                      options={defaultOptions}
+                      width={40}
+                      height={20}
+                      style={{ margin: 0 }}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -240,15 +259,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               display="flex"
               alignItems="center"
             >
-              {istyping ? (
-                <div>
-                  <Lottie
-                    options={defaultOptions}
-                    width={70}
-                    style={{ marginBottom: 15, marginLeft: 0 }}
-                  />
-                </div>
-              ) : null}
               <Button onClick={toggleEmojiPicker} ml={2}>
                 <BsEmojiSmile size={24} />
               </Button>
@@ -268,8 +278,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               />
               <Button onClick={sendMessage} colorScheme="teal" ml={2}>
                 Send
-              </Button>{" "}
-              {/* Send Button */}
+              </Button>
             </FormControl>
           </Box>
         </>
