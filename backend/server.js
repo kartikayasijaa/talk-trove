@@ -3,7 +3,7 @@ const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
-const Message = require("./models/messageModel"); // Import your Message model
+const Message = require("./models/messageModel");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
@@ -72,27 +72,43 @@ io.on("connection", (socket) => {
     });
   });
 
-  // New event for reacting to a message
-  socket.on("reactMessage", async ({ messageId, userId, reaction }) => {
-    try {
-      const updatedMessage = await Message.findByIdAndUpdate(
-        messageId,
-        {
-          $push: { reactions: { user: userId, reaction: reaction } },
-        },
-        { new: true }
-      ).populate("reactions.user", "name");
-
-      // Emit the updated message with reactions to all clients
-      socket.broadcast.emit("messageReaction", updatedMessage);
-    } catch (error) {
-      console.error("Error in reacting to message:", error); // Improved error logging
+  // Event for reacting to a message
+socket.on("reactMessage", async ({ messageId, userId, reaction }) => {
+  try {
+    // Find the message by ID
+    const message = await Message.findById(messageId);
+    
+    if (!message) {
+      console.error("Message not found");
+      return;
     }
-  });
+
+    // Check if the user has already reacted
+    const existingReactionIndex = message.reactions.findIndex(
+      (r) => r.user.toString() === userId
+    );
+
+    if (existingReactionIndex !== -1) {
+      // If the user has already reacted, update their reaction
+      message.reactions[existingReactionIndex].reaction = reaction;
+    } else {
+      // Otherwise, push a new reaction
+      message.reactions.push({ user: userId, reaction });
+    }
+
+    // Save the updated message
+    const updatedMessage = await message.save().populate("reactions.user", "name");
+
+    // Emit the updated message with reactions to all clients
+    socket.broadcast.emit("messageReaction", updatedMessage);
+  } catch (error) {
+    console.error("Error in reacting to message:", error);
+  }
+});
+
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
     socket.leave(userData._id);
-    // Clean up other socket listeners if needed
   });
 });

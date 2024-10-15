@@ -11,7 +11,7 @@ const messageSchema = mongoose.Schema(
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         reaction: { 
           type: String, 
-          enum: ['like', 'love', 'sad', 'angry', 'laugh'], // Specify reaction types
+          enum: ['👍', '❤️', '😂', '😢', '🎉'], // Updated to match emojis used
           required: true 
         },
       },
