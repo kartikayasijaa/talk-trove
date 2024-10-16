@@ -9,11 +9,7 @@ const messageSchema = mongoose.Schema(
     reactions: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        reaction: { 
-          type: String, 
-          enum: ['👍', '❤️', '😂', '😢', '🎉'], // Updated to match emojis used
-          required: true 
-        },
+        reaction: { type: String, required: true }, // Removed enum for flexibility
       },
     ],
   },

@@ -3,7 +3,6 @@ const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
-const Message = require("./models/messageModel");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
@@ -60,55 +59,47 @@ io.on("connection", (socket) => {
   socket.on("typing", (room) => socket.in(room).emit("typing"));
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 
-  socket.on("new message", (newMessageRecieved) => {
-    let chat = newMessageRecieved.chat;
+  socket.on("new message", (newMessageReceived) => {
+    let chat = newMessageReceived.chat;
 
     if (!chat.users) return console.log("chat.users not defined");
 
     chat.users.forEach((user) => {
-      if (user._id == newMessageRecieved.sender._id) return;
+      if (user._id == newMessageReceived.sender._id) return;
 
-      socket.in(user._id).emit("message recieved", newMessageRecieved);
+      socket.in(user._id).emit("message received", newMessageReceived);
     });
   });
 
-  // Event for reacting to a message
-socket.on("reactMessage", async ({ messageId, userId, reaction }) => {
-  try {
-    // Find the message by ID
-    const message = await Message.findById(messageId);
-    
-    if (!message) {
-      console.error("Message not found");
-      return;
+  socket.on("reactMessage", async ({ messageId, userId, reaction }) => {
+    try {
+      // Fetch the message from the database
+      const message = await Message.findById(messageId); // Assuming Message is your Mongoose model
+  
+      if (!message) {
+        return console.error("Message not found");
+      }
+  
+      // Check if the user has already reacted
+      const existingReactionIndex = message.reactions.findIndex(
+        (r) => r.user.toString() === userId
+      );
+  
+      if (existingReactionIndex !== -1) {
+        // Update the existing reaction
+        message.reactions[existingReactionIndex].reaction = reaction;
+      } else {
+        // Push a new reaction
+        message.reactions.push({ user: userId, reaction });
+      }
+  
+      // Save the updated message
+      const updatedMessage = await message.save();
+  
+      // Broadcast the updated message with reactions to all clients
+      socket.broadcast.emit("messageReaction", updatedMessage);
+    } catch (error) {
+      console.error("Error in reacting to message:", error);
     }
-
-    // Check if the user has already reacted
-    const existingReactionIndex = message.reactions.findIndex(
-      (r) => r.user.toString() === userId
-    );
-
-    if (existingReactionIndex !== -1) {
-      // If the user has already reacted, update their reaction
-      message.reactions[existingReactionIndex].reaction = reaction;
-    } else {
-      // Otherwise, push a new reaction
-      message.reactions.push({ user: userId, reaction });
-    }
-
-    // Save the updated message
-    const updatedMessage = await message.save().populate("reactions.user", "name");
-
-    // Emit the updated message with reactions to all clients
-    socket.broadcast.emit("messageReaction", updatedMessage);
-  } catch (error) {
-    console.error("Error in reacting to message:", error);
-  }
-});
-
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-    socket.leave(userData._id);
   });
-});
+  
