@@ -1,11 +1,11 @@
 const connectDB = require("../config/db");
-const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-dotenv.config();
 const bcrypt = require("bcryptjs");
-const User = require("../models/userModel"); // Adjust the path according to your project structure
+const User = require("../models/userModel"); 
 const Chat = require("../models/chatModel");
 const Message = require("../models/messageModel");
+
+console.log("MongoDB URI: ", process.env.MONGO_URL);
 
 // Function to create dummy users
 const createDummyUsers = async (numUsers = 10) => {
@@ -36,7 +36,7 @@ const createDummyChats = async (users, numChats = 5) => {
   for (let i = 1; i <= numChats; i++) {
     const randomUsers = users
       .sort(() => 0.5 - Math.random())
-      .slice(0, Math.floor(Math.random() * users.length) + 2); // Random users in each group
+      .slice(0, Math.floor(Math.random() * users.length) + 2);
 
     const newChat = {
       _id: mongoose.Types.ObjectId(),
@@ -78,17 +78,15 @@ const createDummyMessages = async (chats, users, numMessages = 20) => {
 
 // Seed the database
 const seedDatabase = async () => {
-
   try {
-
     await connectDB();
-    // Create dummy users
+
+    await User.deleteMany({});
+    await Chat.deleteMany({});
+    await Message.deleteMany({});
+
     const users = await createDummyUsers();
-
-    // Create dummy chats
     const chats = await createDummyChats(users);
-
-    // Create dummy messages
     await createDummyMessages(chats, users);
 
     console.log("Database seeded successfully!");
@@ -99,4 +97,7 @@ const seedDatabase = async () => {
   }
 };
 
+console.log("MongoDB URI: ", process.env.MONGO_URL);
+
 seedDatabase();
+
