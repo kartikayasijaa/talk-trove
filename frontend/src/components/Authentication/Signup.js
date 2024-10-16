@@ -20,8 +20,10 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
   const [picLoading, setPicLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = async () => {
+    setIsLoading(true);
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword) {
       toast({
@@ -32,6 +34,7 @@ const Signup = () => {
         position: "bottom",
       });
       setPicLoading(false);
+      setIsLoading(false);
       return;
     }
     if (password !== confirmpassword) {
@@ -42,6 +45,7 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
+      setIsLoading(false);
       return;
     }
     console.log(name, email, password, pic);
@@ -71,6 +75,7 @@ const Signup = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setPicLoading(false);
+      setIsLoading(false);
       navigate("/chats");
     } catch (error) {
       toast({
@@ -82,6 +87,7 @@ const Signup = () => {
         position: "bottom",
       });
       setPicLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -137,6 +143,7 @@ const Signup = () => {
         <Input
           placeholder="Enter Your Name"
           onChange={(e) => setName(e.target.value)}
+          isDisabled={isLoading}
         />
       </FormControl>
       <FormControl id="email" isRequired>
@@ -145,6 +152,7 @@ const Signup = () => {
           type="email"
           placeholder="Enter Your Email Address"
           onChange={(e) => setEmail(e.target.value)}
+          isDisabled={isLoading}
         />
       </FormControl>
       <FormControl id="password" isRequired>
@@ -154,6 +162,7 @@ const Signup = () => {
             type={show ? "text" : "password"}
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
+            isDisabled={isLoading}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -169,6 +178,7 @@ const Signup = () => {
             type={show ? "text" : "password"}
             placeholder="Confirm password"
             onChange={(e) => setConfirmpassword(e.target.value)}
+            isDisabled={isLoading}
           />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -184,6 +194,7 @@ const Signup = () => {
           p={1.5}
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
+          isDisabled={isLoading}
         />
       </FormControl>
       <Button
