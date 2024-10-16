@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const PasswordReset = require("../models/ResetOTPModel");
 const generateToken = require("../config/generateToken");
+const generateOtp = require("../utils/helpers/generateOtp");
+const { sendEmail } = require("../utils/helpers/emailService");
 
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
@@ -17,7 +20,10 @@ const allUsers = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async (req, res) => {
+<<<<<<< HEAD
+=======
   
+>>>>>>> be56316e4935f90c182df5aefe35f49a868ca9e0
   const { name, email, password, pic } = req.body;
 
   if (!name || !email || !password) {
@@ -58,6 +64,15 @@ const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+<<<<<<< HEAD
+
+=======
+  
+>>>>>>> be56316e4935f90c182df5aefe35f49a868ca9e0
+  if(!user){
+    res.status(401);
+    throw new Error("Invalid Email");
+  }
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
@@ -69,8 +84,64 @@ const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(401);
-    throw new Error("Invalid Email or Password");
+    throw new Error("Invalid Password");
   }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+const forgotPass = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(400);
+      throw new Error("User with this email does not exist");
+    }
+    const resetToken = generateOtp();
+    const passwordReset = new PasswordReset({
+      userId: user._id,
+      otp: resetToken,
+      otpExpires: Date.now() + 3600000, // 1 hour expiry
+    });
+    await passwordReset.save();
+    
+    const subject = 'Password Reset: Talk-Trove';
+    const text = `Your OTP to reset the password for your Talk-Trove account.\n\n ${resetToken}\nIf you did not request this, please ignore this email, and your password will remain unchanged.\n`;
+
+    await sendEmail({ to: user.email, subject, text });
+    res.send('OTP has been sent to your email.');
+
+  }catch (err) {
+    res.status(500);
+    throw new Error("Server Error");
+  }
+});
+
+const resetPass = asyncHandler(async (req, res) => {
+  const { otp, password } = req.body;
+
+  try {
+    const passwordReset = await PasswordReset.findOne({
+      otp: otp,
+      otpExpires: { $gt: Date.now() }
+    });
+
+    if (!passwordReset) {
+      return res.status(400).send('OTP is invalid or has expired.');
+    }
+    // Update password
+    const user = await User.findById(passwordReset.userId);
+    user.password = password;
+    await PasswordReset.findOneAndDelete({ userId: user._id });
+    await user.save();
+
+    res.send('Password has been updated.');
+
+  } catch (err) {
+    res.status(500);
+    console.log(err);
+    throw new Error("Server Error");
+  }
+});
+
+module.exports = { allUsers, registerUser, authUser, forgotPass, resetPass };
