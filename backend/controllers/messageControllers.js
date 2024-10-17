@@ -48,4 +48,30 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage };
+const likeToggle = asyncHandler(async (req, res) => {
+  const { messageId } = req.params;
+
+  try {
+    // Find the message by ID
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+      res.status(404);
+      throw new Error("Message not found");
+    }
+
+    // Toggle the isLiked field
+    message.isLiked = !message.isLiked;
+    await message.save();
+
+    res.json({
+      message: "Message like status updated",
+      isLiked: message.isLiked,
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+module.exports = { allMessages, sendMessage, likeToggle };
