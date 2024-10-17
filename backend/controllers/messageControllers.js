@@ -23,10 +23,25 @@ const sendMessage = asyncHandler(async (req, res) => {
     return res.sendStatus(400);
   }
 
+  // Extract URLs from the message content
+  const urls = content.match(/https?:\/\/[^\s]+/g) || [];
+  let linkPreviews = [];
+
+  // Fetch link previews for each URL
+  for (const url of urls) { 
+    const preview = await fetch(`https://api.linkpreview.net/?key=YOUR_API_KEY&q=${url}`) // Replace with your API key
+      .then(response => response.json())
+      .catch(err => console.error("Error fetching link preview:", err));
+    if (preview) {
+      linkPreviews.push(preview);
+    }
+  }
+
   var newMessage = {
     sender: req.user._id,
     content: content,
     chat: chatId,
+    linkPreviews: linkPreviews, // Add link previews to the message
   };
 
   try {
