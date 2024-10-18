@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
@@ -70,10 +71,22 @@ const ScrollableChat = ({ messages }) => {
                   borderRadius: "20px",
                   padding: "15px 15px",
                   maxWidth: "75%",
-                  wordBreak: "break-word", // Ensure long words break
+                  wordBreak: "break-all", // Ensure long words break
+                  textDecoration: 'underline',
                 }}
               >
-                {m.content}
+                {m.content.split(' ').map((word) => {
+                  if (word.startsWith('http://') || word.startsWith('https://')) {
+                    return <a href={word} target="_blank" rel="noopener noreferrer" style={{
+                      textDecoration: 'underline',
+                      color: 'blue',
+                      transition: 'color 0.3s ease',
+                      ':active': { color: 'blue' }, 
+                      ':visited': { color: 'purple' }
+                    }}>{word}</a>;
+                  }
+                  return word + ' ';
+                })}
               </span>
             </div>
           </div>
