@@ -29,7 +29,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   // Fetch link previews for each URL
   for (const url of urls) { 
-    const preview = await fetch(`https://api.linkpreview.net/?key=YOUR_API_KEY&q=${url}`) // Replace with your API key
+    const preview = await fetch(`https://api.linkpreview.net/?key=efacdd90bdd79a4fcb8c942575a16531&q=${url}`) // Replace with your API key
       .then(response => response.json())
       .catch(err => console.error("Error fetching link preview:", err));
     if (preview) {
