@@ -89,6 +89,7 @@ const ScrollableChat = ({ messages }) => {
                 })}
               </span>
             </div>
+            <span
           </div>
         ))}
     </ScrollableFeed>

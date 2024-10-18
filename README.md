@@ -63,13 +63,15 @@ https://github.com/kartikayasija/chat-app/assets/115306535/7aae21fb-a523-4393-a4
 
 Then follow these steps:-
 
+U Must have a MongoDB compass installed in ur system
+
 1. Clone the project
 
 ```bash
   git clone https://github.com/kartikayasija/chat-app
 ```
 
-### Start the server:
+### Start the backend :
 
 ```bash
   cd backend
@@ -77,7 +79,7 @@ Then follow these steps:-
 
 1. Make a .env file and copy the content from ```.env.sample```
 
-2. Seed dummy data in database [one-time only]
+2. Seed dummy data in database [one-time only only to create dummy users] {NOT REQUIRED FOR locally deployment NOW } IGNORE step 2 continue with step 3 :-
 
 ```bash
 yarn seed
@@ -92,7 +94,7 @@ yarn seed
 3. Run yarn command
 
 ```bash
-  yarn dev
+  yarn dev or yarn run dev
 ```
 
 4. Open new tab in browser and navigate to:
