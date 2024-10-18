@@ -1,6 +1,6 @@
 import { BsEmojiSmile } from "react-icons/bs";
 import { FormControl } from "@chakra-ui/form-control";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Inpu, Textarea } from "@chakra-ui/react";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
@@ -75,7 +75,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const sendMessage = async () => {
-    if (newMessage) {
+    if (newMessage.trim()) {
       socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
@@ -85,10 +85,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
+        const messageContent = newMessage.replace(/\n/g, "<br>");
         const { data } = await axiosReq.post(
           "/api/message",
           {
-            content: newMessage,
+            content: messageContent,
             chatId: selectedChat,
           },
           config
@@ -168,6 +169,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setTyping(false);
       }
     }, timerLength);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      if (event.shiftKey) {
+        // Allow default behavior for Shift+Enter (new line)
+        return;
+      } else {
+        // Prevent default behavior and send message for Enter
+        event.preventDefault();
+        sendMessage();
+      }
+    }
   };
 
   return (
@@ -252,7 +266,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
 
             <FormControl
-              onKeyDown={(event) => event.key === "Enter" && sendMessage()}
+              onKeyDown={handleKeyDown}
               id="first-name"
               isRequired
               mt={3}
@@ -269,12 +283,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                   <EmojiPicker onEmojiClick={handleEmojiClick} />
                 </div>
               )}
-              <Input
+              <Textarea
                 variant="filled"
                 bg="#E0E0E0"
                 placeholder="Enter a message.."
                 value={newMessage}
                 onChange={typingHandler}
+                rows={1}
+                resize="none"
               />
               <Button onClick={sendMessage} colorScheme="teal" ml={2}>
                 Send
