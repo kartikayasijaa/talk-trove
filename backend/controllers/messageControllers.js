@@ -48,4 +48,43 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { allMessages, sendMessage };
+const editMessage = asyncHandler(async (req, res) => {
+  const { messageId, newContent } = req.body;
+
+  if (!messageId || !newContent) {
+    console.log("Invalid data passed into request");
+    return res.sendStatus(400);
+  }
+
+  try {
+    let message = await Message.findById(messageId);
+
+    if (!message) {
+      res.status(404);
+      throw new Error("Message not found");
+    }
+
+    // Check if the sender of the message is the same as the requester
+    if (message.sender.toString() !== req.user._id.toString()) {
+      res.status(401);
+      throw new Error("You can only edit your own messages");
+    }
+
+    // Update the content and mark the message as edited
+    message.content = newContent;
+    message.isEdited = true;
+
+    await message.save();
+
+    // Populate sender and chat details, similar to other message APIs
+    message = await message.populate("sender", "name pic").execPopulate();
+    message = await message.populate("chat").execPopulate();
+
+    res.json(message);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
+
+module.exports = { allMessages, sendMessage, editMessage };
