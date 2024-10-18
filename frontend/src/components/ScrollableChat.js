@@ -40,10 +40,12 @@ const ScrollableChat = ({ messages }) => {
                 borderRadius: "20px",
                 padding: "5px 15px",
                 maxWidth: "75%",
+                whiteSpace: "pre-wrap",
               }}
-            >
-              {m.content}
-            </span>
+              dangerouslySetInnerHTML={{
+                __html: m.content.replace(/\n/g, "<br>"),
+              }}
+            ></span>
           </div>
         ))}
     </ScrollableFeed>
