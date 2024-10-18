@@ -129,10 +129,7 @@ yarn seed
 - Make sure you show some love by giving ⭐ to our repository.
 
 <div align="center">
-
-  <a href="https://github.com/kartikayasijaa/talk-trove/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=kartikayasijaa/talk-trove&&max=1000" />
-  </a>
+  <img src=".vaunt\cards\contributors.svg" width="800" height= "350" />
 </div>
 
 ## Star the Repo! 🌟
