@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { Avatar } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
+import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import {
@@ -17,37 +18,26 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { Avatar } from "@chakra-ui/avatar";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { useToast } from "@chakra-ui/toast";
-import ChatLoading from "../ChatLoading";
 import { Spinner } from "@chakra-ui/spinner";
-import ProfileModal from "./ProfileModal";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
-import { getSender } from "../../config/ChatLogics";
-import UserListItem from "../userAvatar/UserListItem";
+import { useToast } from "@chakra-ui/toast";
+import { Tooltip } from "@chakra-ui/tooltip";
+import { useEffect, useState } from "react";
+import NotificationBadge, { Effect } from "react-notification-badge";
+import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
+import { getSender } from "../../config/ChatLogics";
 import { axiosReq } from "../../config/axios";
+import ChatLoading from "../ChatLoading";
+import UserListItem from "../userAvatar/UserListItem";
+import ProfileModal from "./ProfileModal";
 
 function SideDrawer() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-
-  const {
-    setSelectedChat,
-    user,
-    notification,
-    setNotification,
-    chats,
-    setChats,
-  } = ChatState();
+  const [userProfile, setUserProfile] = useState({}); // Add this state for user profile
+  const { setSelectedChat, user, notification, setNotification, chats, setChats } = ChatState();
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -134,6 +124,11 @@ function SideDrawer() {
     return () => clearTimeout(delayDebounceFn);
   }, [search]); // Effect runs when 'search' changes
 
+  // New function to handle profile update
+  const handleUpdate = (updatedUser) => {
+    console.log("Updated User:", updatedUser);
+  };
+
   return (
     <>
       <Box
@@ -159,10 +154,7 @@ function SideDrawer() {
         <div>
           <Menu>
             <MenuButton p={1}>
-              <NotificationBadge
-                count={notification.length}
-                effect={Effect.SCALE}
-              />
+              <NotificationBadge count={notification.length} effect={Effect.SCALE} />
               <BellIcon fontSize="2xl" m={1} />
             </MenuButton>
             <MenuList pl={2}>
@@ -184,15 +176,11 @@ function SideDrawer() {
           </Menu>
           <Menu>
             <MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
-              <Avatar
-                size="sm"
-                cursor="pointer"
-                name={user.name}
-                src={user.pic}
-              />
+              <Avatar size="sm" cursor="pointer" name={user.name} src={user.pic} />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user}>
+              {/* Updated ProfileModal component usage */}
+              <ProfileModal user={user} onUpdate={handleUpdate}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />
@@ -214,7 +202,6 @@ function SideDrawer() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              {/* <Button onClick={handleSearch}>X</Button> */}
             </Box>
             {loading ? (
               <ChatLoading />

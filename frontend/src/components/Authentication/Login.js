@@ -2,9 +2,8 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
-import axios from "axios";
 import { useToast } from "@chakra-ui/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatState } from "../../Context/ChatProvider";
 import { axiosReq } from "../../config/axios";
@@ -23,55 +22,58 @@ const Login = () => {
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
-      toast({
-        title: "Please Fill all the Feilds",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setLoading(false);
-      return;
+        toast({
+            title: "Please Fill all the Fields",
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+        });
+        setLoading(false);
+        return;
     }
 
-    // console.log(email, password);
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
+        const config = {
+            headers: {
+                "Content-type": "application/json",
+            },
+        };
 
-      const { data } = await axiosReq.post(
-        "/api/user/login",
-        { email, password },
-        config
-      );
+        const { data } = await axiosReq.post(
+            "/api/user/login",
+            { email, password },
+            config
+        );
 
-      // console.log(JSON.stringify(data));
-      toast({
-        title: "Login Successful",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setUser(data);
-      setLoading(false);
-      navigate("/chats");
+        // Assuming the response data contains a token
+        const { token, ...userData } = data; // Destructure to get token and user data
+        localStorage.setItem("token", token); // Save the token in local storage
+        localStorage.setItem("userInfo", JSON.stringify(userData)); // Store user info separately
+
+        toast({
+            title: "Login Successful",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+        });
+        setUser(userData); // Save user info in state
+        setLoading(false);
+        navigate("/chats");
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: error.response.data?.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      setLoading(false);
+        toast({
+            title: "Error Occurred!",
+            description: error.response.data?.message,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+        });
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <VStack spacing="10px">
