@@ -72,3 +72,16 @@ io.on("connection", (socket) => {
     socket.leave(userData._id);
   });
 });
+const cron = require("node-cron");
+const Message = require("./models/messageModel");
+
+// Run a cron job every minute to check for messages to delete
+cron.schedule("* * * * *", async () => {
+  const now = new Date();
+  try {
+    await Message.deleteMany({ disappearAt: { $lte: now } });
+    console.log("Disappeared messages deleted successfully");
+  } catch (error) {
+    console.error("Error deleting disappeared messages:", error);
+  }
+});

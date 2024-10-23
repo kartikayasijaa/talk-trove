@@ -16,7 +16,7 @@ const createDummyUsers = async (numUsers = 10) => {
     const hashedPassword = await bcrypt.hash(`password${i}`, salt);
 
     dummyUsers.push({
-      _id: mongoose.Types.ObjectId(),
+      _id:new  mongoose.Types.ObjectId(),
       name: `User_${i}`,
       email: `user${i}@example.com`,
       password: hashedPassword,
@@ -39,7 +39,7 @@ const createDummyChats = async (users, numChats = 5) => {
       .slice(0, Math.floor(Math.random() * users.length) + 2); // Random users in each group
 
     const newChat = {
-      _id: mongoose.Types.ObjectId(),
+      _id:new mongoose.Types.ObjectId(),
       chatName: `GroupChat_${i}`,
       isGroupChat: true,
       users: randomUsers.map((user) => user._id),
@@ -63,7 +63,7 @@ const createDummyMessages = async (chats, users, numMessages = 20) => {
     const randomUser = users[Math.floor(Math.random() * users.length)];
 
     const newMessage = {
-      _id: mongoose.Types.ObjectId(),
+      _id:new mongoose.Types.ObjectId(),
       sender: randomUser._id,
       content: `This is a dummy message ${i}`,
       chat: randomChat._id,
