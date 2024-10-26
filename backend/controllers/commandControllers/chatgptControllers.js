@@ -7,12 +7,10 @@ const User = require("../../models/userModel");
 
 dotenv.config()
 
-console.log(process.env.LLAMA_API_KEY);
-// const baseURL = "https://api.aimlapi.com/v1";
 const openai = new OpenAI({
   key: process.env.OPENAI_API_KEY
 });
-const llama = asyncHandler(async (req, res) => {
+const chatgpt = asyncHandler(async (req, res) => {
   const { content, chatId } = req.body;
   const model = "gpt-3.5-turbo";
   if (!content || !chatId) {
@@ -57,4 +55,4 @@ const llama = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = llama ;
+module.exports = chatgpt ;
