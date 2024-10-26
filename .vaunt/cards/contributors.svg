@@ -1,0 +1,88 @@
+
+	
+	<svg xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+	xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+	xmlns="http://www.w3.org/2000/svg" width="1080" height="500">
+		<defs>
+		<clipPath id="avatar-clip">
+			<rect x="75" y="50" width="200" height="200" rx="100" ry="100"/>
+		</clipPath>
+		<linearGradient id="card-bg" gradientUnits="userSpaceOnUse" x1="0" y1="400" x2="0" y2="200">
+			<stop offset="0" style="stop-color:#0D1016"/>
+			<stop offset="1" style="stop-color:#18202B"/>
+		</linearGradient>
+		</defs>
+		<style>
+		<![CDATA[
+			#carrousel {
+			  overflow: hidden;
+			  animation: carrousel 20s linear infinite;
+			}
+	  
+			@keyframes carrousel {
+			  0% { transform: translateX(1080px); }
+			  100% { transform: translateX(-0px); }
+			}
+		  ]]>
+		.st1{fill:#F9F9F9;}
+		.st2{fill:#18202B;}
+		.st3{font-family:&apos;Futura-Medium&apos;;}
+		.st4{font-size:148.3442px;}
+		.st5{fill:#D1232A;}
+		.st6{fill:#FFFFFF;}
+		.st7{font-size:30.0209px;}
+		.st8{fill:#808080;}
+		.st9{font-size:22px;}
+		.st10{font-size:30px;}
+		.st13{fill:#9A1C25;stroke:#9A1C25;stroke-width:0.1854;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+		.st14{fill:#D1232A;stroke:#9A1C25;stroke-width:0.1854;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+		.st15{font-size:60px;}
+		</style>
+		
+		<g id="carrousel">
+			<g transform="translate(-1080, 0)">
+				<g transform="translate(0, 0)">
+					<rect x="0" y="0" rx="20" ry="20" width="1070" height="500" style=" fill: url(#card-bg);"/>
+					<text x="535" y="250" dominant-baseline="middle" text-anchor="middle" class="st6 st3 st15">Community Contributors</text>
+				</g>
+				<g>
+					<text x="910" y="93" dominant-baseline="middle" text-anchor="middle" class="st8 st3 st9">Made With</text>
+				</g>
+				<g transform="translate(-650, -30) scale(7)">
+					<g>
+						<polygon class="st13" points="236,13 234.3,11.5 234.3,9.2 236,10.8 		"/>
+						<polygon class="st14" points="231.7,14.1 234.3,11.5 234.3,9.2 231.7,11.9 		"/>
+						<polygon class="st13" points="232.8,13 236,16.3 236,18.5 231.7,14.1 		"/>
+						<polygon class="st14" points="236,13 237.7,11.5 237.7,9.2 236,10.8 		"/>
+						<polygon class="st13" points="240.4,14.1 237.7,11.5 237.7,9.2 240.4,11.9 		"/>
+						<polygon class="st14" points="239.3,13 236,16.3 236,18.5 240.4,14.1 		"/>
+					</g>
+				</g>
+				<rect x="30" y="310" rx="5" ry="5" width="1010" height="5" style=" fill:#D1232A"/>
+			</g>
+
+			
+
+			<g transform="translate(0, 0)">
+				<g transform="translate(0, 0)">
+					<rect x="0" y="0" rx="20" ry="20" width="1070" height="500" style=" fill: url(#card-bg);"/>
+					<text x="535" y="250" dominant-baseline="middle" text-anchor="middle" class="st6 st3 st15">Community Contributors</text>
+				</g>
+				<g>
+				 <text x="910" y="93" dominant-baseline="middle" text-anchor="middle" class="st8 st3 st9">Made With</text>
+				</g>
+				<g transform="translate(-650, -30) scale(7)">
+					<g>
+						<polygon class="st13" points="236,13 234.3,11.5 234.3,9.2 236,10.8 		"/>
+						<polygon class="st14" points="231.7,14.1 234.3,11.5 234.3,9.2 231.7,11.9 		"/>
+						<polygon class="st13" points="232.8,13 236,16.3 236,18.5 231.7,14.1 		"/>
+						<polygon class="st14" points="236,13 237.7,11.5 237.7,9.2 236,10.8 		"/>
+						<polygon class="st13" points="240.4,14.1 237.7,11.5 237.7,9.2 240.4,11.9 		"/>
+						<polygon class="st14" points="239.3,13 236,16.3 236,18.5 240.4,14.1 		"/>
+					</g>
+				</g>
+				<rect x="30" y="310" rx="5" ry="5" width="1010" height="5" style=" fill:#D1232A"/>
+			</g>
+		  </g>
+		</svg>
+		
