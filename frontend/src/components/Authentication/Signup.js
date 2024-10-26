@@ -170,7 +170,7 @@ const Signup = () => {
       return;
     }
   };
-
+// added password strength
   return (
     <VStack spacing="5px">
       <FormControl id="first-name" isRequired>
