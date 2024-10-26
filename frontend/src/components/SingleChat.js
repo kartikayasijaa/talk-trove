@@ -12,7 +12,7 @@ import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
 import EmojiPicker from "emoji-picker-react";
-
+import CommandOverlay from "./miscellaneous/CommandOverlay.js";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
@@ -28,7 +28,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [command, setCommand] = useState("");
+  const [showOverlay, setShowOverlay] = useState(false);
   const toast = useToast();
+
 
   const defaultOptions = {
     loop: true,
@@ -85,9 +88,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         setNewMessage("");
+        let api = "/api/message"
+        if (newMessage.startsWith("/")){
+          let route = newMessage.split(" ")[0]
+          api = "/api/command"+`${route.endsWith(":")?route.slice(0,-1):route}`;
+        }
         const messageContent = newMessage.replace(/\n/g, "<br>");
+
         const { data } = await axiosReq.post(
-          "/api/message",
+          api,
           {
             content: messageContent,
             chatId: selectedChat,
@@ -150,8 +159,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     });
   });
 
+  const handleCommandSelect = (command) => {
+    setCommand(command);
+    setNewMessage(`/${command} : `);
+    setShowOverlay(false);
+  };
+
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
+
+    if(e.target.value.startsWith("/") && e.target.value.split(" ").length==1){
+      setShowOverlay(true);
+    } else { setShowOverlay(false) }
 
     if (!socketConnected) return;
 
@@ -264,6 +283,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 )}
               </div>
             )}
+            
+
+            {/* Render command overlay */}
+            {showOverlay && <CommandOverlay onSelect={handleCommandSelect} />}
 
             <FormControl
               onKeyDown={handleKeyDown}
@@ -272,7 +295,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               mt={3}
               display="flex"
               alignItems="center"
-            >
+              >
+
               <Button onClick={toggleEmojiPicker} ml={2}>
                 <BsEmojiSmile size={24} />
               </Button>
