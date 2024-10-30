@@ -89,12 +89,31 @@ const Signup = () => {
     }
   };
 
+  const isValidEmail = (email) => {
+    // Regular expression for validating an Email
+    const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return regex.test(email);
+  };
+
   const submitHandler = async () => {
     setSubmitLoading(true);
     setisLoading(true);
     if (!name || !email || !password || !confirmPassword) {
       toast({
         title: "Please Fill all the Fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setSubmitLoading(false);
+      setisLoading(false);
+      return;
+    }
+    if (!isValidEmail(email)) {
+      toast({
+        title: "Invalid Email Address",
+        description: "Please enter a valid email.",
         status: "warning",
         duration: 5000,
         isClosable: true,

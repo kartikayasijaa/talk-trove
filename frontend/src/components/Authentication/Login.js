@@ -13,18 +13,24 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { setUser } = ChatState();
 
   const navigate = useNavigate();
 
+  const isValidEmail = (email) => {
+    // Regular expression for validating an Email
+    const regex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return regex.test(email);
+  };
+
   const submitHandler = async () => {
     setLoading(true);
     if (!email || !password) {
       toast({
-        title: "Please Fill all the Feilds",
+        title: "Please fill all the fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -34,7 +40,19 @@ const Login = () => {
       return;
     }
 
-    // console.log(email, password);
+    if (!isValidEmail(email)) {
+      toast({
+        title: "Invalid Email Address",
+        description: "Please enter a valid email.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const config = {
         headers: {
@@ -48,7 +66,6 @@ const Login = () => {
         config
       );
 
-      // console.log(JSON.stringify(data));
       toast({
         title: "Login Successful",
         status: "success",
@@ -62,7 +79,7 @@ const Login = () => {
       navigate("/chats");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data?.message,
         status: "error",
         duration: 5000,
