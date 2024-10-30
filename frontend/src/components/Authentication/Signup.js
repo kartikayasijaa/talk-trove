@@ -7,6 +7,9 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosReq } from "../../config/axios";
+import { Progress } from "@chakra-ui/react";
+
+const MIN_PASSWORD_LENGTH = 8;
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -25,7 +28,7 @@ const Signup = () => {
     setPicLoading(true);
     if (!name || !email || !password || !confirmpassword) {
       toast({
-        title: "Please Fill all the Feilds",
+        title: "Please Fill all the Fields",
         status: "warning",
         duration: 5000,
         isClosable: true,
@@ -42,6 +45,18 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
+      return;
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      toast({
+        title: "Password is too short",
+        description: `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
       return;
     }
     console.log(name, email, password, pic);
@@ -74,7 +89,7 @@ const Signup = () => {
       navigate("/chats");
     } catch (error) {
       toast({
-        title: "Error Occured!",
+        title: "Error Occurred!",
         description: error.response.data.message,
         status: "error",
         duration: 5000,
@@ -130,6 +145,11 @@ const Signup = () => {
     }
   };
 
+  const calculatePasswordStrength = (password) => {
+    if (!password) return 0;
+    return Math.min(100, (password.length / MIN_PASSWORD_LENGTH) * 100);
+  };
+
   return (
     <VStack spacing="5px">
       <FormControl id="first-name" isRequired>
@@ -161,6 +181,12 @@ const Signup = () => {
             </Button>
           </InputRightElement>
         </InputGroup>
+        <Progress
+          value={calculatePasswordStrength(password)}
+          size="sm"
+          colorScheme={password && password.length >= MIN_PASSWORD_LENGTH ? "green" : "red"}
+          mt={2}
+        />
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Confirm Password</FormLabel>
