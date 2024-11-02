@@ -1,12 +1,12 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Box, Text } from "@chakra-ui/layout";
-import { ChatState } from "../../Context/ChatProvider";
+import { CheckIcon } from "@chakra-ui/icons";
 
-const UserListItem = ({ handleFunction,user }) => {
+const UserListItem = ({ handleFunction, user, alreadyInGroup }) => {
   return (
     <Box
-      onClick={handleFunction}
-      cursor="pointer"
+      onClick={alreadyInGroup ? null : handleFunction}
+      cursor={alreadyInGroup ? "not-allowed" : "pointer"}
       bg="#E8E8E8"
       _hover={{
         background: "#38B2AC",
@@ -28,13 +28,17 @@ const UserListItem = ({ handleFunction,user }) => {
         name={user.name}
         src={user.pic}
       />
-      <Box>
+      <Box flex="1">
         <Text>{user.name}</Text>
         <Text fontSize="xs">
           <b>Email : </b>
           {user.email}
         </Text>
       </Box>
+
+      {alreadyInGroup && (
+        <CheckIcon color="green.500" /> 
+      )}
     </Box>
   );
 };
